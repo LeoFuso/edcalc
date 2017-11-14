@@ -1,7 +1,14 @@
 #include <iostream>
+#include <vector>
+using namespace std;
 
 int main() {
-    std::cout << "Starting calculations..." << std::endl;
+
+    size_t size = 1000000;
+
+    vector<double> *vector = new vector<double> (size);
+
+    cout << "Starting calculations..." << endl;
 
     return 0;
 }
