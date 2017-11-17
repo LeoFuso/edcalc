@@ -3,7 +3,6 @@
 #include <math.h>
 #include "StopWatch.h"
 #include <random>
-#include <algorithm>
 
 using namespace std;
 
@@ -17,16 +16,18 @@ struct Test {
     }
 };
 
-void fill_encapsulated_vector(vector<double> &x,vector<double> &y, int n);
+void fill_encapsulated_vector(vector<double> &x, vector<double> &y, int n);
+
 void fill_classic_vector(double *x, double *y, int n);
 
-static inline double distance_naive(vector<double> &values, int n);
-static inline double distance_naive_classic_double(double *values, int n);
+static inline double distance_naive_encapsulated_vector(vector<double> &x, vector<double> &y, int n);
+
+static inline double distance_naive_classic_vector(double *x, double *y, int n);
 
 int main() {
 
     size_t size = 1000000;
-    size_t real_size = size/2;
+    size_t real_size = size / 2;
 
     Test tt;
     StopWatch sw;
@@ -45,49 +46,55 @@ int main() {
     cout << "Filling vector for calculations..." << endl;
 
     fill_encapsulated_vector(encapsulated_vector_a, encapsulated_vector_b, real_size);
-    fill_classic_vector(classic_vector_a,classic_vector_b, real_size);
+    fill_classic_vector(classic_vector_a, classic_vector_b, real_size);
 
     cout << "OK!" << endl;
 
-    cout << "Starting calculations..." << endl;
+    cout << "Starting calculations...\n" << endl;
 
-    for (int i = 0; i < 100; i++)
-    {
+    for (int i = 0; i < 100; i++) {
+
         sw.Restart();
-        // Calculations
+
+        distance_naive_classic_vector(classic_vector_a, classic_vector_b, real_size);
         tt.test1 += sw.ElapsedUs();
+
+        sw.Restart();
+
+        distance_naive_encapsulated_vector(encapsulated_vector_a, encapsulated_vector_b, real_size);
+        tt.test2 += sw.ElapsedUs();
+
         sw.Restart();
     }
 
+    cout << "     Naive with classic vector:   " << (tt.test1 / 100) << endl;
+    cout << "Naive with encapsulated vector:   " << (tt.test2 / 100) << endl;
 
     return 0;
 }
 
-static inline double distance_naive_encapsulated_vector(vector<double> &x,vector<double> &y, int n) {
+static inline double distance_naive_encapsulated_vector(vector<double> &x, vector<double> &y, int n) {
 
     double result = 0;
-    int distance = n/2;
     double pn = 0;
     double qn = 0;
     for (int i = 0; i < n; ++i) {
         pn = x[i];
-        qn = y[i+distance];
-        result += (pn - qn)*(pn - qn);
+        qn = y[i];
+        result += (pn - qn) * (pn - qn);
     }
     return sqrt(result);
 }
 
-
-static inline double distance_naive_classic_vector(double *x, double*y, int n) {
+static inline double distance_naive_classic_vector(double *x, double *y, int n) {
 
     double result = 0;
-    int distance = n/2;
     double pn = 0;
     double qn = 0;
     for (int i = 0; i < n; ++i) {
         pn = x[i];
-        qn = y[i+distance];
-        result += (pn - qn)*(pn - qn);
+        qn = y[i];
+        result += (pn - qn) * (pn - qn);
     }
     return sqrt(result);
 }
@@ -100,14 +107,14 @@ static inline double distanceFast(double *v1, double *v2, int n) {
     return 0.0;
 }
 
-void fill_encapsulated_vector(vector<double> &x,vector<double> &y, int n) {
+void fill_encapsulated_vector(vector<double> &x, vector<double> &y, int n) {
 
     random_device rd;
 
     mt19937 e2(rd());
     uniform_real_distribution<> dist(1, 101);
 
-    for (int i = 0; i < n; ++i){
+    for (int i = 0; i < n; ++i) {
         x.push_back(dist(e2));
         y.push_back(dist(e2));
     }
@@ -120,7 +127,7 @@ void fill_classic_vector(double *x, double *y, int n) {
     mt19937 e2(rd());
     uniform_real_distribution<> dist(1, 101);
 
-    for (int i = 0; i < n; ++i){
+    for (int i = 0; i < n; ++i) {
         x[i] = dist(e2);
         y[i] = dist(e2);
     }
