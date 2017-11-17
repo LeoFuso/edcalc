@@ -7,22 +7,26 @@
 using namespace std;
 
 struct Test {
-    double test1;
-    double test2;
-    double test3;
+    double time_test1;
+    double result_test1;
+
+    double time_test2;
+    double result_test2;
+
+    double time_test3;
+    double result_test3;
 
     void Reset() {
-        test1 = test2 = test3 = 0;
+        time_test1 = result_test1 = time_test2 = result_test2 = time_test3 = result_test3 = 0;
     }
 };
 
 void fill_encapsulated_vector(vector<double> &x, vector<double> &y, int n);
-
 void fill_classic_vector(double *x, double *y, int n);
 
 static inline double distance_naive_encapsulated_vector(vector<double> &x, vector<double> &y, int n);
-
 static inline double distance_naive_classic_vector(double *x, double *y, int n);
+static inline double distance_hypot_classic_vector(double *x, double *y, int n);
 
 int main() {
 
@@ -32,10 +36,7 @@ int main() {
     Test tt;
     StopWatch sw;
 
-    tt.test1 = 0;
-    tt.test2 = 0;
-    tt.test3 = 0;
-
+    tt.Reset();
 
     vector<double> encapsulated_vector_a;
     vector<double> encapsulated_vector_b;
@@ -50,25 +51,40 @@ int main() {
 
     cout << "OK!" << endl;
 
-    cout << "Starting calculations...\n" << endl;
+    cout << "Starting calculations..." << endl;
 
     for (int i = 0; i < 100; i++) {
 
         sw.Restart();
-
         distance_naive_classic_vector(classic_vector_a, classic_vector_b, real_size);
-        tt.test1 += sw.ElapsedUs();
+        tt.time_test1 += sw.ElapsedUs();
 
         sw.Restart();
 
         distance_naive_encapsulated_vector(encapsulated_vector_a, encapsulated_vector_b, real_size);
-        tt.test2 += sw.ElapsedUs();
+        tt.time_test2 += sw.ElapsedUs();
 
         sw.Restart();
+
+        distance_hypot_classic_vector(classic_vector_a, classic_vector_b, real_size);
+        tt.time_test3+= sw.ElapsedUs();
+
+        sw.Restart();
+
     }
 
-    cout << "     Naive with classic vector:   " << (tt.test1 / 100) << endl;
-    cout << "Naive with encapsulated vector:   " << (tt.test2 / 100) << endl;
+    tt.result_test1 = distance_naive_classic_vector(classic_vector_a, classic_vector_b, real_size);
+    tt.result_test2 = distance_naive_encapsulated_vector(encapsulated_vector_a, encapsulated_vector_b, real_size);
+    tt.result_test3 = distance_hypot_classic_vector(classic_vector_a, classic_vector_b, real_size);
+
+    cout << "     Naive with classic vector:   " << (tt.time_test1 / 100) << endl;
+    cout << "                        Result:   " << (tt.result_test1)     << "\n" << endl;
+    cout << "Naive with encapsulated vector:   " << (tt.time_test2 / 100) << endl;
+    cout << "                        Result:   " << (tt.result_test2)     << "\n" << endl;
+    cout << "     Hypot with classic vector:   " << (tt.time_test3 / 100) << endl;
+    cout << "                        Result:   " << (tt.result_test3)     << "\n" << endl;
+
+    tt.Reset();
 
     return 0;
 }
@@ -99,8 +115,14 @@ static inline double distance_naive_classic_vector(double *x, double *y, int n) 
     return sqrt(result);
 }
 
-static inline double distanceHypot(double *v1, double *v2, int n) {
-    return 0.0;
+static inline double distance_hypot_classic_vector(double *x, double *y, int n) {
+
+    double result = hypot(x[0], y[0]);
+
+    for (int i = 1; i < n; ++i) {
+        result += hypot(result, x[i] - y[i]);
+    }
+    return result;
 }
 
 static inline double distanceFast(double *v1, double *v2, int n) {
