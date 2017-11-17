@@ -3,5 +3,5 @@ project(tcc)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES main.cpp StopWatch.cpp)
 add_executable(tcc ${SOURCE_FILES})
