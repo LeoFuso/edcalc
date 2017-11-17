@@ -51,7 +51,7 @@ int main() {
 
     cout << "OK!" << endl;
 
-    cout << "Starting calculations..." << endl;
+    cout << "Starting calculations...\n" << endl;
 
     for (int i = 0; i < 100; i++) {
 
