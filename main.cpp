@@ -18,6 +18,8 @@ struct Test {
 };
 
 void fill_vector(double *x, double *y, int n);
+void fill_vector_absolute(double *x, double *y);
+
 
 void print_results(double time, double result);
 
@@ -28,6 +30,7 @@ int main() {
 
     size_t size = 1000000;
     size_t real_size = size / 2;
+    size_t absolute_size = 311;
     size_t qtd_tests = 100;
 
     Test test_naive;
@@ -47,9 +50,13 @@ int main() {
     double *vector_a = (double*) aligned_alloc(32, real_size * sizeof(double));
     double *vector_b = (double*) aligned_alloc(32, real_size * sizeof(double));
 
+    double *small_vector_a = (double*) aligned_alloc(32, absolute_size * sizeof(double));
+    double *small_vector_b = (double*) aligned_alloc(32, absolute_size * sizeof(double));
+
     cout << "Filling vector for calculations..." << endl;
 
     fill_vector(vector_a, vector_b, real_size);
+    fill_vector_absolute(small_vector_a, small_vector_b);
 
     cout << "OK!\n" << endl;
 
@@ -59,11 +66,11 @@ int main() {
 
     for (int i = 0; i < qtd_tests; i++) {
         sw.Restart();
-        distance_naive(vector_a, vector_b, real_size);
+        distance_naive(small_vector_a, small_vector_b, absolute_size);
         test_naive.time += sw.ElapsedUs();
     }
 
-    test_naive.result = distance_naive(vector_a, vector_b, real_size);
+    test_naive.result = distance_naive(small_vector_a, small_vector_b, absolute_size);
     print_results(test_naive.time / qtd_tests,test_naive.result);
     test_naive.Reset();
 
@@ -110,6 +117,24 @@ void fill_vector(double *x, double *y, int n) {
         x[i] = dist(e2);
         y[i] = dist(e2);
     }
+}
+
+void fill_vector_absolute(double *x, double *y) {
+
+    x[0] = 101.961;
+    x[1] = 143.514;
+    x[2] = 111.99;
+    x[3] = 71.4711;
+    x[4] = 54.7317;
+    x[5] = 60.7136;
+
+    y[0] = 105.871;
+    y[1] = 45.9983;
+    y[2] = 2.72035;
+    y[3] = 57.3432;
+    y[4] = 101.523;
+    y[5] = 106.243;
+
 }
 
 void print_results(double time, double result){
