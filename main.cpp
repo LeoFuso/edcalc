@@ -79,33 +79,6 @@ int main() {
     return 0;
 }
 
-static inline double distance_naive(double *x, double *y, int n) {
-
-    double result = 0;
-    double pn = 0;
-    double qn = 0;
-    for (int i = 0; i < n; ++i) {
-        pn = x[i];
-        qn = y[i];
-        result += (pn - qn) * (pn - qn);
-    }
-    return sqrt(result);
-}
-
-static inline double distance_hypot(double *x, double *y, int n) {
-
-    double result = hypot(x[0], y[0]);
-
-    for (int i = 1; i < n; ++i) {
-        result += hypot(result, x[i] - y[i]);
-    }
-    return result;
-}
-
-static inline double distance_fast(double *v1, double *v2, int n) {
-    return 0.0;
-}
-
 void fill_vector(double *x, double *y, int n) {
 
     random_device rd;
