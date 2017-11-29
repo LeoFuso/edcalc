@@ -27,12 +27,11 @@ double dhypot(const double *x,const double *y, size_t n)
 {
     double result = 0;
     double x1,x2,y1,y2 = 0;
-    int rsize = n/2;
-    for (int i = 0; i < rsize; ++i) {
+    for (int i = 0; i < n; i+=2) {
         x1 = x[i];
         y1 = y[i];
-        x2 = x[rsize + i];
-        y2 = y[rsize + i];
+        x2 = x[i + 1];
+        y2 = y[i + 1];
         result += hypot(x1 - x2, y1 - y2);
     }
     return result;
@@ -42,15 +41,14 @@ double dfast(const double *x,const double *y, size_t n)
 {
     double result = 0;
     double x1,x2,y1,y2 = 0;
-    int rsize = n/2;
-    for (int i = 0; i < rsize; ++i) {
+    for (int i = 0; i < n; i+=2) {
         x1 = x[i];
         y1 = y[i];
-        x2 = x[rsize + i];
-        y2 = y[rsize + i];
+        x2 = x[i + 1];
+        y2 = y[i + 1];
         result += fdist(x1 - x2, y1 - y2);
     }
-    return result;;
+    return result;
 }
 
 double fdist(double P, double Q)
