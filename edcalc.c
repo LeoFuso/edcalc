@@ -10,7 +10,7 @@
 
 double fdist(double P, double Q);
 
-static inline double dnaive(const double *x,const double *y, int n)
+double dnaive(const double *x,const double *y, size_t n)
 {
     double result = 0;
     double pn = 0;
@@ -23,7 +23,7 @@ static inline double dnaive(const double *x,const double *y, int n)
     return sqrt(result);
 }
 
-static inline double dhypot(const double *x,const double *y, int n)
+double dhypot(const double *x,const double *y, size_t n)
 {
     double result = 0;
     double x1,x2,y1,y2 = 0;
@@ -38,7 +38,7 @@ static inline double dhypot(const double *x,const double *y, int n)
     return result;
 }
 
-static inline double dfast(const double *x,const double *y, int n)
+double dfast(const double *x,const double *y, size_t n)
 {
     double result = 0;
     double x1,x2,y1,y2 = 0;

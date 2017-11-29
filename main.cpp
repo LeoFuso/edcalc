@@ -1,8 +1,11 @@
 #include <iostream>
-#include <vector>
-#include <math.h>
 #include "StopWatch.h"
 #include <random>
+
+extern "C"
+{
+#include "edcalc.h"
+}
 
 using namespace std;
 
@@ -17,21 +20,15 @@ struct Test {
 
 };
 
-void fill_vector(double *x, double *y, int n);
-void fill_vector_absolute(double *x, double *y);
-
-
+void fill_vector(double *x, double *y, size_t n);
 void print_results(double time, double result);
 
-static inline double distance_naive(double *x, double *y, int n);
-static inline double distance_hypot(double *x, double *y, int n);
 
 int main() {
 
     size_t size = 1000000;
     size_t real_size = size / 2;
-    size_t absolute_size = 311;
-    size_t qtd_tests = 100;
+    size_t qtd_tests = 1000;
 
     Test test_naive;
     Test test_hypot;
@@ -39,48 +36,54 @@ int main() {
 
     StopWatch sw;
 
-    cout << "\nSetting up test structs for the results..." << endl;
-
-    test_naive.Reset();
-    test_hypot.Reset();
-    test_fast.Reset();
-
-    cout << "OK!\n" << endl;
-
     double *vector_a = (double*) aligned_alloc(32, real_size * sizeof(double));
     double *vector_b = (double*) aligned_alloc(32, real_size * sizeof(double));
-
-    double *small_vector_a = (double*) aligned_alloc(32, absolute_size * sizeof(double));
-    double *small_vector_b = (double*) aligned_alloc(32, absolute_size * sizeof(double));
 
     cout << "Filling vector for calculations..." << endl;
 
     fill_vector(vector_a, vector_b, real_size);
-    fill_vector_absolute(small_vector_a, small_vector_b);
 
     cout << "OK!\n" << endl;
 
-    cout << "Starting calculations...\n" << endl;
+    cout << "\nSetting up test structs for the results...\n" << endl;
+
 
     cout << "NAIVE METHOD:\n" << endl;
-
+    test_naive.Reset();
     for (int i = 0; i < qtd_tests; i++) {
         sw.Restart();
-        distance_naive(small_vector_a, small_vector_b, absolute_size);
+        test_naive.result += dnaive(vector_a, vector_b, real_size);
         test_naive.time += sw.ElapsedUs();
     }
-
-    test_naive.result = distance_naive(small_vector_a, small_vector_b, absolute_size);
-    print_results(test_naive.time / qtd_tests,test_naive.result);
+    print_results(test_naive.time / qtd_tests,test_naive.result / qtd_tests);
     test_naive.Reset();
 
+    cout << "HYPOT METHOD:\n" << endl;
+    test_hypot.Reset();
+    for (int i = 0; i < qtd_tests; i++) {
+        sw.Restart();
+        test_hypot.result += dhypot(vector_a, vector_b, real_size);
+        test_hypot.time += sw.ElapsedUs();
+    }
+    print_results(test_hypot.time / qtd_tests,test_hypot.result / qtd_tests);
+    test_hypot.Reset();
 
+
+    cout << "FAST METHOD:\n" << endl;
+    test_fast.Reset();
+    for (int i = 0; i < qtd_tests; i++) {
+        sw.Restart();
+        test_fast.result += dfast(vector_a, vector_b, real_size);
+        test_fast.time += sw.ElapsedUs();
+    }
+    print_results(test_fast.time / qtd_tests,test_fast.result / qtd_tests);
+    test_fast.Reset();
 
     return 0;
 }
 
-void fill_vector(double *x, double *y, int n) {
-
+void fill_vector(double *x, double *y, size_t n)
+{
     random_device rd;
 
     mt19937 e2(rd());
@@ -92,26 +95,8 @@ void fill_vector(double *x, double *y, int n) {
     }
 }
 
-void fill_vector_absolute(double *x, double *y) {
-
-    x[0] = 101.961;
-    x[1] = 143.514;
-    x[2] = 111.99;
-    x[3] = 71.4711;
-    x[4] = 54.7317;
-    x[5] = 60.7136;
-
-    y[0] = 105.871;
-    y[1] = 45.9983;
-    y[2] = 2.72035;
-    y[3] = 57.3432;
-    y[4] = 101.523;
-    y[5] = 106.243;
-
-}
-
 void print_results(double time, double result){
-    cout << "ELAPSED TIME:   " << time    << endl;
+    cout << "ELAPSED TIME:   " << time/1000    << "s" << endl;
     cout << "      RESULT:   " << result  << "\n" << endl;
     cout << "OK!\n" << endl;
 }
