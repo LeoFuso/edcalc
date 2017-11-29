@@ -9,7 +9,8 @@
 #pragma once
 
 #include <math.h>
+#include <stddef.h>
 
-static inline double dnaive(const double *x,const double *y, int n);
-static inline double dhypot(const double *x,const double *y, int n);
-static inline double dfast(const double *x,const double *y, int n);
+double dnaive(const double *x,const double *y, size_t n);
+double dhypot(const double *x,const double *y, size_t n);
+double dfast(const double *x,const double *y, size_t n);
