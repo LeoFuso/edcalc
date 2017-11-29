@@ -26,8 +26,7 @@ void print_results(double time, double result);
 
 int main() {
 
-    size_t size = 1000000;
-    size_t real_size = size / 2;
+    size_t real_size = 1000000;
     size_t qtd_tests = 1000;
 
     Test test_naive;
@@ -50,11 +49,11 @@ int main() {
 
     cout << "NAIVE METHOD:\n" << endl;
     test_naive.Reset();
-    for (int i = 0; i < qtd_tests; i++) {
-        sw.Restart();
+    sw.Restart();
+    for (int i = 0; i < qtd_tests; i++)
         test_naive.result += dnaive(vector_a, vector_b, real_size);
-        test_naive.time += sw.ElapsedUs();
-    }
+    test_naive.time = sw.ElapsedUs();
+
     print_results(test_naive.time / qtd_tests,test_naive.result / qtd_tests);
     test_naive.Reset();
 

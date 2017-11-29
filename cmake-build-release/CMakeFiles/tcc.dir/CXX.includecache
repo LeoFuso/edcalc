@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/lfuso/Repository/tcc/StopWatch.cpp
+StopWatch.h
+/home/lfuso/Repository/tcc/StopWatch.h
+
+/home/lfuso/Repository/tcc/StopWatch.h
+chrono
+-
+
+/home/lfuso/Repository/tcc/edcalc.h
+math.h
+-
+stddef.h
+-
+
+/home/lfuso/Repository/tcc/main.cpp
+iostream
+-
+StopWatch.h
+/home/lfuso/Repository/tcc/StopWatch.h
+random
+-
+edcalc.h
+/home/lfuso/Repository/tcc/edcalc.h
+
