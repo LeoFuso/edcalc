@@ -9,15 +9,14 @@ extern "C"
 
 using namespace std;
 
-struct Test {
-
+struct Test
+{
     double time;
     double result;
 
     void Reset() {
         time = result = 0;
     }
-
 };
 
 void fill_vector(double *x, double *y, size_t n);
