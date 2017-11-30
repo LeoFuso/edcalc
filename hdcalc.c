@@ -6,21 +6,25 @@
  * Created on 2017-11-28
  */
 
-#include "edcalc.h"
+#include "hdcalc.h"
 
 double fdist(double P, double Q);
 
 double dnaive(const double *x,const double *y, size_t n)
 {
     double result = 0;
-    double pn = 0;
-    double qn = 0;
-    for (int i = 0; i < n; ++i) {
-        pn = x[i];
-        qn = y[i];
-        result += (pn - qn) * (pn - qn);
+    double x1,x2,y1,y2 = 0;
+
+    for (int i = 0; i < n; i+=2)
+    {
+        x1 = x[i];
+        y1 = y[i];
+        x2 = x[i + 1];
+        y2 = y[i + 1];
+        result += sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2));
     }
-    return sqrt(result);
+
+    return result;
 }
 
 double dhypot(const double *x,const double *y, size_t n)
