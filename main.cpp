@@ -45,8 +45,8 @@ int main() {
     return 0;
 }
 
-void _test(double(*method)(const double *,const double *, size_t), const double *x,const double *y, size_t n){
-
+void _test(double(*method)(const double *,const double *, size_t), const double *x,const double *y, size_t n)
+{
     Test test;
     StopWatch sw;
     size_t qtd_tests = 1000;
