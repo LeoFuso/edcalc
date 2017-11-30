@@ -1,5 +1,5 @@
 /*
- * File:   edcalc.h
+ * File:   hdcalc.h
  * Author: lfuso
  * From: https://github.com/LeoFuso/edcalc
  *

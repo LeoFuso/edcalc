@@ -7,5 +7,5 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 
 
-set(SOURCE_FILES main.cpp StopWatch.cpp hdcalc.c hdcalc.h)
+set(SOURCE_FILES main.cpp StopWatch.cpp hdcalc.c hdcalc.h edcalc.h edcalc.c)
 add_executable(tcc ${SOURCE_FILES})
