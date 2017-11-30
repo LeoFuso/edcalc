@@ -22,63 +22,43 @@ struct Test {
 
 void fill_vector(double *x, double *y, size_t n);
 void print_results(double time, double result);
-
+void _test(double(*method)(const double *,const double *, size_t ), const double *x,const double *y, size_t n);
 
 int main() {
 
-    size_t real_size = 1000000;
-    size_t qtd_tests = 1000;
+    size_t vector_size = 1000000;
 
-    Test test_naive;
-    Test test_hypot;
-    Test test_fast;
+    auto *vector_a = (double*) aligned_alloc(32, vector_size * sizeof(double));
+    auto *vector_b = (double*) aligned_alloc(32, vector_size * sizeof(double));
 
-    StopWatch sw;
-
-    double *vector_a = (double*) aligned_alloc(32, real_size * sizeof(double));
-    double *vector_b = (double*) aligned_alloc(32, real_size * sizeof(double));
-
-    cout << "Filling vector for calculations..." << endl;
-
-    fill_vector(vector_a, vector_b, real_size);
-
-    cout << "OK!\n" << endl;
-
-    cout << "\nSetting up test structs for the results...\n" << endl;
-
+    fill_vector(vector_a, vector_b, vector_size);
 
     cout << "NAIVE METHOD:\n" << endl;
-    test_naive.Reset();
-    sw.Restart();
-    for (int i = 0; i < qtd_tests; i++)
-        test_naive.result += dnaive(vector_a, vector_b, real_size);
-    test_naive.time = sw.ElapsedUs();
-
-    print_results(test_naive.time / qtd_tests,test_naive.result / qtd_tests);
-    test_naive.Reset();
+    _test(&dnaive, vector_a,vector_b,vector_size);
 
     cout << "HYPOT METHOD:\n" << endl;
-    test_hypot.Reset();
-    for (int i = 0; i < qtd_tests; i++) {
-        sw.Restart();
-        test_hypot.result += dhypot(vector_a, vector_b, real_size);
-        test_hypot.time += sw.ElapsedUs();
-    }
-    print_results(test_hypot.time / qtd_tests,test_hypot.result / qtd_tests);
-    test_hypot.Reset();
-
+    _test(&dhypot, vector_a,vector_b,vector_size);
 
     cout << "FAST METHOD:\n" << endl;
-    test_fast.Reset();
-    for (int i = 0; i < qtd_tests; i++) {
-        sw.Restart();
-        test_fast.result += dfast(vector_a, vector_b, real_size);
-        test_fast.time += sw.ElapsedUs();
-    }
-    print_results(test_fast.time / qtd_tests,test_fast.result / qtd_tests);
-    test_fast.Reset();
+    _test(&dfast, vector_a,vector_b,vector_size);
 
     return 0;
+}
+
+void _test(double(*method)(const double *,const double *, size_t), const double *x,const double *y, size_t n){
+
+    Test test;
+    StopWatch sw;
+    size_t qtd_tests = 1000;
+
+    test.Reset();
+    sw.Restart();
+    for (int i = 0; i < qtd_tests; i++)
+        test.result += method(x, y, n);
+    test.time = sw.ElapsedUs();
+
+    print_results(test.time / qtd_tests,test.result / qtd_tests);
+    test.Reset();
 }
 
 void fill_vector(double *x, double *y, size_t n)
