@@ -1,1 +1,0 @@
-/usr/bin/c++   -march=native -O3 -DNDEBUG   CMakeFiles/tcc.dir/main.cpp.o CMakeFiles/tcc.dir/StopWatch.cpp.o CMakeFiles/tcc.dir/edcalc.c.o  -o tcc 

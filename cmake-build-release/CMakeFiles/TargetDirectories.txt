@@ -1,3 +1,0 @@
-/home/lfuso/Repository/tcc/cmake-build-release/CMakeFiles/rebuild_cache.dir
-/home/lfuso/Repository/tcc/cmake-build-release/CMakeFiles/edit_cache.dir
-/home/lfuso/Repository/tcc/cmake-build-release/CMakeFiles/tcc.dir
