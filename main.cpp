@@ -5,6 +5,7 @@
 extern "C"
 {
 #include "hdcalc.h"
+#include "edcalc.h"
 }
 
 using namespace std;
@@ -31,6 +32,12 @@ int main() {
     auto *vector_b = (double*) aligned_alloc(32, vector_size * sizeof(double));
 
     fill_vector(vector_a, vector_b, vector_size);
+
+    cout << "BASELINE METHOD:\n" << endl;
+    _test(&euclidean_baseline, vector_a,vector_b,vector_size);
+
+    cout << "SSE METHOD:\n" << endl;
+    _test(&euclidean_sse, vector_a,vector_b,vector_size);
 
     cout << "NAIVE METHOD:\n" << endl;
     _test(&dnaive, vector_a,vector_b,vector_size);
