@@ -28,13 +28,13 @@ int main() {
 
     size_t vector_size = 1000000;
 
-    auto *vector_a = (double*) aligned_alloc(128, vector_size * sizeof(double));
-    auto *vector_b = (double*) aligned_alloc(128, vector_size * sizeof(double));
+    auto *vector_a = (double*) aligned_alloc(256, vector_size * sizeof(double));
+    auto *vector_b = (double*) aligned_alloc(256, vector_size * sizeof(double));
 
     fill_vector(vector_a, vector_b, vector_size);
 
     cout << "BASELINE METHOD:\n" << endl;
-    _test(&euclidean_baseline, vector_a,vector_b,vector_size);
+    _test(&euclidean_naive, vector_a,vector_b,vector_size);
 
     cout << "SSE METHOD:\n" << endl;
     _test(&euclidean_sse, vector_a,vector_b,vector_size);
