@@ -10,8 +10,9 @@
 
 #include <glob.h>
 #include <xmmintrin.h>
+#include <math.h>
 
 
 double euclidean_sse(const double *x, const double *y, size_t dim);
-double euclidean_baseline(const double *x,const double *y, size_t n);
+double euclidean_naive(const double *x,const double *y, size_t n);
 
