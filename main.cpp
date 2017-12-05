@@ -28,8 +28,8 @@ int main() {
 
     size_t vector_size = 1000000;
 
-    auto *vector_a = (double*) aligned_alloc(256, vector_size * sizeof(double));
-    auto *vector_b = (double*) aligned_alloc(256, vector_size * sizeof(double));
+    auto *vector_a = (double*) aligned_alloc(32, vector_size * sizeof(double));
+    auto *vector_b = (double*) aligned_alloc(32, vector_size * sizeof(double));
 
     fill_vector(vector_a, vector_b, vector_size);
 

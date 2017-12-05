@@ -9,7 +9,6 @@
 #pragma once
 
 #include <glob.h>
-#include <xmmintrin.h>
 #include <immintrin.h>
 #include <math.h>
 
