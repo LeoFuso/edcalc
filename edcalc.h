@@ -14,7 +14,9 @@
 #include <math.h>
 
 
-double euclidean_sse(const double *x, const double *y, size_t dim);
 double euclidean_naive(const double *x,const double *y, size_t n);
+
+double euclidean_128d(const double *x, const double *y, size_t n);
+double euclidean_256d(const double *x,const double *y, size_t n);
 
 #endif //EDCALC_H_
