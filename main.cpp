@@ -7,6 +7,10 @@ extern "C"
 #include "edcalc.h"
 }
 
+#include <glob.h>
+#include <immintrin.h>
+#include <math.h>
+
 using namespace std;
 
 struct Test
@@ -18,7 +22,7 @@ struct Test
         time = result = 0;
     }
 };
-
+double euclidean_remaining(const double *x,const double *y, size_t n);
 void fill_vector(double *x, double *y, size_t n);
 void fill_vector_control(double *x, double *y);
 void print_results(double time, double result);
@@ -28,8 +32,8 @@ int main() {
 
     size_t vector_size = 1000000;
 
-    auto *vector_a = (double*) aligned_alloc(32, vector_size * sizeof(double));
-    auto *vector_b = (double*) aligned_alloc(32, vector_size * sizeof(double));
+    auto *x = (double*) aligned_alloc(32, vector_size * sizeof(double));
+    auto *y = (double*) aligned_alloc(32, vector_size * sizeof(double));
 
 //    fill_vector(vector_a, vector_b, vector_size);
 //
@@ -42,15 +46,42 @@ int main() {
 //    cout << "SSE3 WITH 128d :\n" << endl;
 //    _test(&euclidean_128d, vector_a,vector_b,vector_size);
 //
-//    cout << "CONTROL TEST:\n" << endl;
+    cout << "CONTROL TEST:\n" << endl;
+
+    fill_vector_control(x, y);
+
+//    cout << "BASELINE CONTROL:\n" << endl;
+//    _test(&euclidean_naive, vector_a,vector_b,6);
 //
-    fill_vector_control(vector_a, vector_b);
+//    cout << "AVX2 WITH 256d CONTROL:\n" << endl;
+//    _test(&euclidean_256d, vector_a,vector_b,6);
+    size_t n = 6;
 
-    cout << "BASELINE CONTROL:\n" << endl;
-    _test(&euclidean_naive, vector_a,vector_b,6);
+    double result = 0;
+    __m256d euclidean = _mm256_setzero_pd();
 
-    cout << "AVX2 WITH 256d CONTROL:\n" << endl;
-    _test(&euclidean_256d, vector_a,vector_b,6);
+    for (; n>3; n-=4) {
+        const __m256d a = _mm256_load_pd(x);
+        const __m256d b = _mm256_load_pd(y);
+        const __m256d sub = _mm256_sub_pd(a,b);
+        const __m256d sqr = _mm256_mul_pd(sub, sub);
+        euclidean = _mm256_add_pd(euclidean, sqr);
+        x+=4;
+        y+=4;
+    }
+    const __m256d shuffle1 = _mm256_permute_pd(euclidean, _MM_SHUFFLE(3,2,1,0));
+    //const __m256d shuffle1 = _mm256_shuffle_pd(euclidean, euclidean, _MM_SHUFFLE(2,1,0,3));
+    const __m256d sum1 = _mm256_add_pd(shuffle1, euclidean);
+    const __m256d shuffle2 = _mm256_permute_pd(sum1, _MM_SHUFFLE(2,1,0,3));
+    const __m256d shuffle3 = _mm256_shuffle_pd(shuffle1,sum1, _MM_SHUFFLE(2,1,0,3));
+    const __m256d sum2 = _mm256_add_pd(shuffle2, euclidean);
+    //const __m256d sum2 = _mm256_add_pd(sum1, shuffle2);
+    result = _mm256_cvtsd_f64(shuffle2);
+    //    _mm_empty();
+    if (n)
+        result += euclidean_remaining(x, y, n);	// remaining 1-3 entries
+
+    result = sqrt(result);
 
     return 0;
 }
@@ -110,4 +141,14 @@ void print_results(double time, double result){
     cout << "ELAPSED TIME:   " << time/1000    << "s" << endl;
     cout << "      RESULT:   " << result  << "\n" << endl;
     cout << "\n" << endl;
+}
+
+double euclidean_remaining(const double *x,const double *y, size_t n)
+{
+    double result = 0;
+    for(int i = 0; i < n; ++i){
+        const double num = x[i] - y[i];
+        result += num * num;
+    }
+    return result;
 }
