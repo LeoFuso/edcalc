@@ -69,15 +69,11 @@ int main() {
         x+=4;
         y+=4;
     }
-    const __m256d shuffle1 = _mm256_permute_pd(euclidean, _MM_SHUFFLE(3,2,1,0));
-    //const __m256d shuffle1 = _mm256_shuffle_pd(euclidean, euclidean, _MM_SHUFFLE(2,1,0,3));
-    const __m256d sum1 = _mm256_add_pd(shuffle1, euclidean);
-    const __m256d shuffle2 = _mm256_permute_pd(sum1, _MM_SHUFFLE(2,1,0,3));
-    const __m256d shuffle3 = _mm256_shuffle_pd(shuffle1,sum1, _MM_SHUFFLE(2,1,0,3));
-    const __m256d sum2 = _mm256_add_pd(shuffle2, euclidean);
-    //const __m256d sum2 = _mm256_add_pd(sum1, shuffle2);
-    result = _mm256_cvtsd_f64(shuffle2);
-    //    _mm_empty();
+    const __m256d shuffle = _mm256_shuffle_pd(euclidean, euclidean, _MM_SHUFFLE(0,0,1,1)); // Latency: 1 Throughput: 1
+    const __m256d sum1 = _mm256_add_pd(shuffle, euclidean);                                // Latency: 4 Throughput: 0.5
+    const __m256d permute= _mm256_permute2f128_pd(sum1,sum1,1);                            // Latency: 3 Throughput: 1
+    const __m256d sum2 = _mm256_add_pd(sum1, permute);                                     // Latency: 4 Throughput: 0.5
+    result =  _mm256_cvtsd_f64(sum2);                                                      //         12             3
     if (n)
         result += euclidean_remaining(x, y, n);	// remaining 1-3 entries
 
