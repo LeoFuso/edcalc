@@ -7,6 +7,8 @@ extern "C"
 #include "edcalc.h"
 }
 
+#include <immintrin.h>
+
 using namespace std;
 
 struct Test
@@ -29,17 +31,44 @@ int main() {
     auto *x = (double*) aligned_alloc(32, n * sizeof(double));
     auto *y = (double*) aligned_alloc(32, n * sizeof(double));
 
-    fill_vector(x, y, n);
+//    fill_vector(x, y, n);
+//
+//    cout << "\n" << endl;
+//    cout << "BASELINE METHOD:\n" << endl;
+//    _test(&euclidean_naive, x,y,n);
+//
+//    cout << "AVX2 WITH 256d :\n" << endl;
+//    _test(&euclidean_256d, x,y,n);
+//
+//    cout << "SSE3 WITH 128d :\n" << endl;
+//    _test(&euclidean_128d, x,y,n);
 
-    cout << "\n" << endl;
-    cout << "BASELINE METHOD:\n" << endl;
-    _test(&euclidean_naive, x,y,n);
+    x[0] = 101.487;
+    y[0] = 20.0173;
+    x[1] = 135.973;
+    y[1] = 138.431;
+    x[2] = 146.711;
+    y[2] = 121.474;
+    x[3] = 82.8316;
+    y[3] = 18.2401;
+    x[4] = 26.4998;
+    y[4] = 27.4125;
+    x[5] = 67.3565;
+    y[5] = 30.4699;
 
-    cout << "AVX2 WITH 256d :\n" << endl;
-    _test(&euclidean_256d, x,y,n);
+    //double result = 0;
+    __m512d euclidean = _mm512_setzero_pd();
 
-    cout << "SSE3 WITH 128d :\n" << endl;
-    _test(&euclidean_128d, x,y,n);
+    for(; n>7; n-=8){
+        const __m512d a = _mm512_load_pd(x);
+        const __m512d b = _mm512_load_pd(y);
+        const __m512d sub = _mm512_sub_pd(a,b);
+        const __m512d sqr = _mm512_mul_pd(sub,sub);
+        euclidean = _mm512_add_pd(euclidean,sqr);
+        x+=8;
+        y+=8;
+    }
+    __m512d _result = euclidean;
 
     return 0;
 }
