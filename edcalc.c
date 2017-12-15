@@ -55,6 +55,24 @@ double euclidean_256d(const double *x,const double *y, size_t n)
     return sqrt(result);
 }
 
+double euclidean_512d(const double *x, const double *y, size_t n)
+{
+    double result = 0;
+    __m512d euclidean = _mm512_setzero_pd();
+
+    for(; n>7; n-=8){
+        const __m512d a = _mm512_load_pd(x);
+        const __m512d b = _mm512_load_pd(y);
+        const __m512d sub = _mm512_sub_pd(a,b);
+        const __m512d sqr = _mm512_mul_pd(sub,sub);
+        euclidean = _mm512_add_pd(euclidean,sqr);
+        x+=8;
+        y+=8;
+    }
+    __m512d _result = euclidean;
+
+}
+
 double euclidean_128d(const double *x, const double *y, size_t n)
 {
     double result = 0;
