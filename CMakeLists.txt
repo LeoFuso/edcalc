@@ -3,11 +3,9 @@ project(tcc)
 
 
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_C_STANDARD 11)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native -mavx512f")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=native -mavx512f")
+set_source_files_properties(ed256d.cpp PROPERTIES COMPILE_FLAGS -march=native -mavx2)
+set_source_files_properties(ed128d.cpp PROPERTIES COMPILE_FLAGS -march=native)
 
-
-set(SOURCE_FILES main.cpp StopWatch.cpp hdcalc.c hdcalc.h edcalc.h edcalc.c)
+set(SOURCE_FILES main.cpp StopWatch.cpp ed128d.cpp ed128d.h ed256d.cpp ed256d.h ednaive.cpp ednaive.h)
 add_executable(tcc ${SOURCE_FILES})
