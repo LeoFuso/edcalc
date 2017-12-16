@@ -19,9 +19,10 @@ struct Test
 };
 void fill_vector(double *x, double *y, size_t n);
 void print_results(double time, double result);
-void _test(double(*method)(const double *,const double *, size_t ), const double *x,const double *y, size_t n);
+template <class T> void _test(const double *x,const double *y, size_t n);
 
 int main() {
+
 
     size_t n = 1000000;
 
@@ -32,19 +33,21 @@ int main() {
 
     cout << "\n" << endl;
     cout << "BASELINE METHOD:\n" << endl;
-    _test(&_baseline::calculate, x,y,n);
+    _test<_baseline>(x,y,n);
 
     cout << "SSE3 WITH 128d :\n" << endl;
-    _test(&_128d::calculate, x,y,n);
+    _test<_128d>(x,y,n);
 
     cout << "AVX2 WITH 256d :\n" << endl;
-    _test(&_256d::calculate, x,y,n);
+    _test<_256d>(x,y,n);
 
     return 0;
 }
 
-void _test(double(*method)(const double *,const double *, size_t), const double *x,const double *y, size_t n)
+template <class T>
+void _test(const double *x,const double *y, size_t n)
 {
+
     Test test;
     StopWatch sw;
     size_t qtd_tests = 10000;
@@ -52,11 +55,12 @@ void _test(double(*method)(const double *,const double *, size_t), const double 
     test.Reset();
     sw.Restart();
     for (int i = 0; i < qtd_tests; i++)
-        test.result += method(x, y, n);
+        test.result += T::calculate(x, y, n);
     test.time = sw.ElapsedUs();
 
     print_results(test.time / qtd_tests,test.result / qtd_tests);
     test.Reset();
+
 }
 
 void fill_vector(double *x, double *y, size_t n)
