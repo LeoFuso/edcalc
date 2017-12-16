@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/lfuso/Repository/edcalc/EuclideanDistance.h
+glob.h
+-
+math.h
+-
+
+/home/lfuso/Repository/edcalc/StopWatch.cpp
+StopWatch.h
+/home/lfuso/Repository/edcalc/StopWatch.h
+
+/home/lfuso/Repository/edcalc/StopWatch.h
+chrono
+-
+
+/home/lfuso/Repository/edcalc/ednaive.cpp
+ednaive.h
+/home/lfuso/Repository/edcalc/ednaive.h
+
+/home/lfuso/Repository/edcalc/ednaive.h
+EuclideanDistance.h
+/home/lfuso/Repository/edcalc/EuclideanDistance.h
+
+/home/lfuso/Repository/edcalc/main.cpp
+iostream
+-
+StopWatch.h
+/home/lfuso/Repository/edcalc/StopWatch.h
+random
+-
+ednaive.h
+/home/lfuso/Repository/edcalc/ednaive.h
+

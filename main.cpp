@@ -2,9 +2,9 @@
 #include "StopWatch.h"
 #include <random>
 
-#include "ed128d.h"
-#include "ed256d.h"
 #include "ednaive.h"
+//#include "ed128d.h"
+//#include "ed256d.h"
 
 using namespace std;
 
@@ -31,22 +31,19 @@ int main() {
 
     fill_vector(x, y, n);
 
-    EuclideanDistance *baseline = new Baseline();
-
-    EuclideanDistance *double128 = new Double128();
-
-    EuclideanDistance *double256 = new Double256();
-
-
     cout << "\n" << endl;
+
+    EuclideanDistance *baseline = new Baseline();
     cout << "BASELINE METHOD:\n" << endl;
     _test(baseline, x,y,n);
 
-    cout << "SSE3 WITH 128d :\n" << endl;
-    _test(double128, x,y,n);
+//    EuclideanDistance *double128 = new Double128();
+//    cout << "SSE3 WITH 128d :\n" << endl;
+//    _test(double128, x,y,n);
 
-    cout << "AVX2 WITH 256d :\n" << endl;
-    _test(double256, x,y,n);
+//    EuclideanDistance *double256 = new Double256();
+//    cout << "AVX2 WITH 256d :\n" << endl;
+//    _test(double256, x,y,n);
 
     return 0;
 }

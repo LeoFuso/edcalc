@@ -4,7 +4,7 @@
 
 #include "ed128d.h"
 
-double inline Double128::calculate(const double *x, const double *y, size_t n)
+double Double128::calculate(const double *x, const double *y, size_t n)
 {
     double result = 0;
     __m128d euclidean = _mm_setzero_pd();
