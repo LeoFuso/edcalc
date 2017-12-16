@@ -5,7 +5,7 @@
 #include "ed256d.h"
 
 
-_256d::calculate(const double *x,const double *y, size_t n)
+double inline _256d::calculate(const double *x,const double *y, size_t n)
 {
     double result = 0;
     __m256d euclidean = _mm256_setzero_pd();
@@ -32,7 +32,7 @@ _256d::calculate(const double *x,const double *y, size_t n)
     return sqrt(result);
 }
 
-_256d::remaining(const double *x,const double *y, size_t n)
+double inline _256d::remaining(const double *x,const double *y, size_t n)
 {
     double result = 0;
     for(int i = 0; i < n; ++i){

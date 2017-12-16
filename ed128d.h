@@ -12,6 +12,6 @@
 class _128d
 {
 public:
-    double static inline calculate(const double *x,const double *y, size_t n);
+    double inline calculate(const double *x,const double *y, size_t n);
 };
 #endif //ED128D_H
