@@ -5,16 +5,15 @@
 #ifndef ED256D_H
 #define ED256D_H
 
-#include <glob.h>
+#include "EuclideanDistance.h"
 #include <immintrin.h>
-#include <math.h>
 
-class _256d
+class Double256 : public EuclideanDistance
 {
-private:
-    double inline remaining(const double *x,const double *y, size_t n);
 public:
-    double inline calculate(const double *x,const double *y, size_t n);
+    double inline calculate(const double *x,const double *y, size_t n) override ;
+private:
+    double static inline remaining(const double *x,const double *y, size_t n);
 };
 
 #endif //ED256D_H

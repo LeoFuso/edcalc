@@ -5,13 +5,12 @@
 #ifndef ED128D_H
 #define ED128D_H
 
-#include <glob.h>
+#include "EuclideanDistance.h"
 #include <xmmintrin.h>
-#include <math.h>
 
-class _128d
+class Double128 : public EuclideanDistance
 {
 public:
-    double inline calculate(const double *x,const double *y, size_t n);
+    double inline calculate(const double *x,const double *y, size_t n) override;
 };
 #endif //ED128D_H
