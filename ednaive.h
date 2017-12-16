@@ -5,13 +5,12 @@
 #ifndef EDNAIVE_H
 #define EDNAIVE_H
 
-#include <glob.h>
-#include <math.h>
+#include "EuclideanDistance.h"
 
-class _baseline
+class Baseline : public EuclideanDistance
 {
 public:
-    double inline calculate(const double *x,const double *y, size_t n);
+    double inline calculate(const double *x,const double *y, size_t n) override;
 };
 
 #endif //EDNAIVE_H

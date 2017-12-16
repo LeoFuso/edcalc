@@ -31,23 +31,23 @@ int main() {
 
     fill_vector(x, y, n);
 
+
     cout << "\n" << endl;
     cout << "BASELINE METHOD:\n" << endl;
-    _test<_baseline>(x,y,n);
+    _test<Baseline>(x,y,n);
 
     cout << "SSE3 WITH 128d :\n" << endl;
-    _test<_128d>(x,y,n);
+    _test<Double128>(x,y,n);
 
     cout << "AVX2 WITH 256d :\n" << endl;
-    _test<_256d>(x,y,n);
+    _test<Double256>(x,y,n);
 
     return 0;
 }
 
-template <class T>
+template <EuclideanDistance *T>
 void _test(const double *x,const double *y, size_t n)
 {
-
     Test test;
     StopWatch sw;
     size_t qtd_tests = 10000;
@@ -55,12 +55,11 @@ void _test(const double *x,const double *y, size_t n)
     test.Reset();
     sw.Restart();
     for (int i = 0; i < qtd_tests; i++)
-        test.result += T::calculate(x, y, n);
+        test.result += T->calculate(x, y, n);
     test.time = sw.ElapsedUs();
 
     print_results(test.time / qtd_tests,test.result / qtd_tests);
     test.Reset();
-
 }
 
 void fill_vector(double *x, double *y, size_t n)
