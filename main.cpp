@@ -19,7 +19,7 @@ struct Test
 };
 void fill_vector(double *x, double *y, size_t n);
 void print_results(double time, double result);
-template <class T> void _test(const double *x,const double *y, size_t n);
+void _test(EuclideanDistance *instance, const double *x,const double *y, size_t n);
 
 int main() {
 
@@ -31,22 +31,27 @@ int main() {
 
     fill_vector(x, y, n);
 
+    EuclideanDistance *baseline = new Baseline();
+
+    EuclideanDistance *double128 = new Double128();
+
+    EuclideanDistance *double256 = new Double256();
+
 
     cout << "\n" << endl;
     cout << "BASELINE METHOD:\n" << endl;
-    _test<Baseline>(x,y,n);
+    _test(baseline, x,y,n);
 
     cout << "SSE3 WITH 128d :\n" << endl;
-    _test<Double128>(x,y,n);
+    _test(double128, x,y,n);
 
     cout << "AVX2 WITH 256d :\n" << endl;
-    _test<Double256>(x,y,n);
+    _test(double256, x,y,n);
 
     return 0;
 }
 
-template <EuclideanDistance *T>
-void _test(const double *x,const double *y, size_t n)
+void _test(EuclideanDistance *instance, const double *x,const double *y, size_t n)
 {
     Test test;
     StopWatch sw;
@@ -55,7 +60,7 @@ void _test(const double *x,const double *y, size_t n)
     test.Reset();
     sw.Restart();
     for (int i = 0; i < qtd_tests; i++)
-        test.result += T->calculate(x, y, n);
+        test.result += instance->calculate(x, y, n);
     test.time = sw.ElapsedUs();
 
     print_results(test.time / qtd_tests,test.result / qtd_tests);
