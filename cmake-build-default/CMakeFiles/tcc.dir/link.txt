@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/tcc.dir/main.cpp.o CMakeFiles/tcc.dir/StopWatch.cpp.o CMakeFiles/tcc.dir/ednaive.cpp.o  -o tcc 

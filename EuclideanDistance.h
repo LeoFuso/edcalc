@@ -13,7 +13,7 @@ class EuclideanDistance
 public:
     EuclideanDistance() = default;
     virtual ~EuclideanDistance()= default;
-    virtual double inline calculate(const double *x,const double *y, size_t n) = 0;
+    virtual double calculate(const double *x,const double *y, size_t n) = 0;
 };
 
 #endif //EUCLIDEANDISTANCE_H
