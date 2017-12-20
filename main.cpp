@@ -62,6 +62,7 @@ _test(const double *x, const double *y, size_t n)
     double time = 0.0, result = 0.0;
     size_t qtd_tests = 10000;
     size_t toDivide = qtd_tests;
+
     sw.Restart();
     while (qtd_tests--)
         result += ed.calculate(x, y, n);
@@ -78,9 +79,9 @@ void fill_vector(double *x, double *y, size_t n)
     mt19937 e2;
     uniform_real_distribution<> dist(1, 151);
 
-    for (int i = 0; i < n; ++i) {
-        x[i] = dist(e2);
-        y[i] = dist(e2);
+    while (n--) {
+        x[n] = dist(e2);
+        y[n] = dist(e2);
     }
 }
 
