@@ -10,5 +10,5 @@ set_source_files_properties(ednaive.cpp PROPERTIES COMPILE_FLAGS "-O3")
 
 #set(SOURCE_FILES main.cpp StopWatch.cpp ed128d.cpp ed128d.h ed256d.cpp ed256d.h ednaive.cpp ednaive.h EuclideanDistance.h)
 #set(SOURCE_FILES main.cpp StopWatch.cpp ed128d.cpp ed128d.h ednaive.cpp ednaive.h EuclideanDistance.h)
-set(SOURCE_FILES main.cpp StopWatch.cpp ednaive.cpp ednaive.h EuclideanDistance.h)
+set(SOURCE_FILES main.cpp StopWatch.cpp ednaive.cpp ednaive.hpp EuclideanDistance.hpp)
 add_executable(tcc ${SOURCE_FILES})

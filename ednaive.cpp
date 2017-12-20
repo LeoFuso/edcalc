@@ -2,7 +2,7 @@
 // Created by Leonardo Fuso on 15/12/17.
 //
 
-#include "ednaive.h"
+#include "ednaive.hpp"
 
 
 double Baseline::calculate(const double *x, const double *y, size_t n) {

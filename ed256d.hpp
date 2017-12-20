@@ -2,10 +2,10 @@
 // Created by Leonardo Fuso on 15/12/17.
 //
 
-#ifndef ED256D_H
-#define ED256D_H
+#ifndef ED256D_HPP
+#define ED256D_HPP
 
-#include "EuclideanDistance.h"
+#include "EuclideanDistance.hpp"
 #include <immintrin.h>
 
 class Double256 : public EuclideanDistance
@@ -16,4 +16,4 @@ private:
     static double remaining(const double *x,const double *y, size_t n);
 };
 
-#endif //ED256D_H
+#endif //ED256D_HPP

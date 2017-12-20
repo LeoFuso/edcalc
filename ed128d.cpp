@@ -2,7 +2,7 @@
 // Created by Leonardo Fuso on 15/12/17.
 //
 
-#include "ed128d.h"
+#include "ed128d.hpp"
 
 double Double128::calculate(const double *x, const double *y, size_t n)
 {

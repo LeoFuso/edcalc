@@ -2,8 +2,8 @@
 // Created by Leonardo Fuso on 16/12/17.
 //
 
-#ifndef EUCLIDEANDISTANCE_H
-#define EUCLIDEANDISTANCE_H
+#ifndef EUCLIDEANDISTANCE_HPP
+#define EUCLIDEANDISTANCE_HPP
 
 #include <glob.h>
 #include <math.h>
@@ -16,4 +16,4 @@ public:
     virtual double calculate(const double *x,const double *y, size_t n) = 0;
 };
 
-#endif //EUCLIDEANDISTANCE_H
+#endif //EUCLIDEANDISTANCE_HPP
