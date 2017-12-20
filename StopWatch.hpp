@@ -1,5 +1,5 @@
 /* 
- * File:   StopWatch.h
+ * File:   StopWatch.hpp
  * Author: KjellKod
  * From: https://github.com/KjellKod/StopWatch
  * 
@@ -7,9 +7,9 @@
  */
 
 
-#pragma once
+#ifndef STOPWATCH_HPP
+#define STOPWATCH_HPP
 #include <chrono>
-
 
 class StopWatch {
 public:
@@ -32,3 +32,4 @@ private:
    clock::time_point mStart;
 };
 
+#endif //STOPWATCH_HPP
