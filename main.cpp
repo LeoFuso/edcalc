@@ -6,18 +6,19 @@
 #define TOSTR1(x) #x
 #define TOSTR(x) TOSTR1(x)
 
-#define _M_SSE3128D Double128
-#define _M_AVX2256D Double256
-
-#ifndef _METHOD
-#define _METHOD Baseline
+#if defined(_BASELINE)
 #include "ednaive.hpp"
-#elif _METHOD == _M_SSE3128D
+#define _METHOD Baseline
+#elif defined(_DOUBLE128)
 #include "ed128d.hpp"
-#elif _METHOD == _M_AVX2256D
+#define _METHOD Double128
+#elif defined(_DOUBLE256)
 #include "ed256d.hpp"
+#define _METHOD Double256
 #else
-#error Unrecognized method!
+#warning Using BASELINE method as default...
+#include "ednaive.hpp"
+#define _METHOD Baseline
 #endif
 
 using namespace std;
