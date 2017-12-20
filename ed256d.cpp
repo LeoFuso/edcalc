@@ -2,7 +2,7 @@
 // Created by Leonardo Fuso on 15/12/17.
 //
 
-#include "ed256d.h"
+#include "ed256d.hpp"
 
 
 double Double256::calculate(const double *x,const double *y, size_t n)
