@@ -1,3 +1,0 @@
-/home/lfuso/Repository/edcalc/CMakeFiles/rebuild_cache.dir
-/home/lfuso/Repository/edcalc/CMakeFiles/tcc.dir
-/home/lfuso/Repository/edcalc/CMakeFiles/edit_cache.dir

@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/tcc.dir/main.cpp.o CMakeFiles/tcc.dir/StopWatch.cpp.o CMakeFiles/tcc.dir/ed256d.cpp.o  -o tcc 
