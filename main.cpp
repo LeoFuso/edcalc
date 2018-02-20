@@ -88,6 +88,7 @@ void fill_vector(double *x, double *y, size_t n)
 void print_results(double time, double result)
 {
     cout << "ELAPSED TIME:   " << time / 1000 << "s" << endl;
+    cout.precision(17);
     cout << "      RESULT:   " << result << "\n" << endl;
     cout << "\n" << endl;
 }
