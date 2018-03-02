@@ -60,15 +60,15 @@ _test(const double *x, const double *y, size_t n)
     ED ed;
 
     double time = 0.0, result = 0.0;
-    size_t qtd_tests = 10000;
+    size_t qtd_tests = 100;
     size_t toDivide = qtd_tests;
 
     sw.Restart();
     while (qtd_tests--)
-        result += ed.calculate(x, y, n);
+    ed.calculate(x, y, n);
     time = sw.ElapsedUs();
 
-    result /= toDivide;
+    result = ed.calculate(x, y, n);
     time /= toDivide;
 
     print_results(time, result);
@@ -87,7 +87,7 @@ void fill_vector(double *x, double *y, size_t n)
 
 void print_results(double time, double result)
 {
-    cout << "ELAPSED TIME:   " << time / 1000 << "s" << endl;
+    cout << "ELAPSED TIME:   " << time/1000000 << "s" << endl;
     cout.precision(17);
     cout << "      RESULT:   " << result << "\n" << endl;
     cout << "\n" << endl;
