@@ -66,6 +66,7 @@ _test(const double *x, const double *y, size_t n)
     sw.Restart();
     while (qtd_tests--)
     ed.calculate(x, y, n);
+
     time = sw.ElapsedUs();
 
     result = ed.calculate(x, y, n);
@@ -87,6 +88,7 @@ void fill_vector(double *x, double *y, size_t n)
 
 void print_results(double time, double result)
 {
+
     cout << "ELAPSED TIME:   " << time/1000000 << "s" << endl;
     cout.precision(17);
     cout << "      RESULT:   " << result << "\n" << endl;
