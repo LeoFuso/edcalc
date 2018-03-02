@@ -1,5 +1,6 @@
-CXXFLAGS := -O3 -std=c++11
-CXXFLAGS_NOOPT := -O1 -std=c++11
+CXXFLAGS := -O2 -std=c++11 -S
+CXXFLAGS := $(CXXFLAGS) -finline-functions -funswitch-loops -fpredictive-commoning -fgcse-after-reload -fno-tree-loop-vectorize -ftree-loop-distribute-patterns -fsplit-paths -fno-tree-slp-vectorize -fno-vect-cost-model -ftree-partial-pre -fpeel-loops -fipa-cp-clone
+
 OBJ_DIR := build
 
 .PHONY: all clean
@@ -15,7 +16,7 @@ clean:
 
 $(OBJ_DIR)/baseline: main.cpp ednaive.cpp.o StopWatch.cpp.o
 	mkdir -p $(OBJ_DIR)
-	$(CXX) $(CXXFLAGS_NOOPT) $^ -D_BASELINE -o $@
+	$(CXX) $(CXXFLAGS) $^ -D_BASELINE -o $@
 
 $(OBJ_DIR)/ed128: main.cpp ed128d.cpp.o StopWatch.cpp.o
 	mkdir -p $(OBJ_DIR)
