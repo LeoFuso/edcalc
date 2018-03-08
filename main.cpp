@@ -65,7 +65,7 @@ _test(const double *x, const double *y, size_t n)
 
     sw.Restart();
     while (qtd_tests--)
-    ed.calculate(x, y, n);
+    	ed.calculate(x, y, n);
     time = sw.ElapsedUs();
 
     result = ed.calculate(x, y, n);
