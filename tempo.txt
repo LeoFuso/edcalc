@@ -1,0 +1,20 @@
+Baseline:
+
+g++ -std=c++11 -c ednaive.cpp -o ednaive.cpp.o -O2 -finline-functions -funswitch-loops -fpredictive-commoning -fgcse-after-reload -fno-tree-loop-vectorize -ftree-loop-distribute-patterns -fsplit-paths -fno-tree-slp-vectorize -fno-vect-cost-model -ftree-partial-pre -fpeel-loops -fipa-cp-clone
+
+g++ -std=c++11 StopWatch.cpp main.cpp -o baseline ednaive.cpp.o -D_BASELINE
+
+
+Double128:
+
+g++ -std=c++11 -c ed128d.cpp -o ed128d.cpp.o -O3
+g++ -std=c++11 StopWatch.cpp main.cpp -o 128d ed128d.cpp.o -D_DOUBLE128
+
+Double256:
+
+g++ -std=c++11 -c ed256d.cpp -o ed256d.cpp.o -O3 -mavx2
+g++ -std=c++11 StopWatch.cpp main.cpp -o 256d ed256d.cpp.o -D_DOUBLE256
+
+
+g++ -std=c++11 -c -S ednaive.cpp -o ednaive.cpp.asm -O2 -finline-functions -funswitch-loops -fpredictive-commoning -fgcse-after-reload -fno-tree-loop-vectorize -ftree-loop-distribute-patterns -fsplit-paths -fno-tree-slp-vectorize -fno-vect-cost-model -ftree-partial-pre -fpeel-loops -fipa-cp-clone
+ 
