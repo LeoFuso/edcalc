@@ -33,13 +33,13 @@ struct Test
     }
 };
 
-void fill_vector(double *x, double *y, size_t n);
+void fill_vector(double *x, double *y, int n);
 void print_results(double time, double result);
-template<class ED>static void _test(const double *, const double *, size_t);
+template<class ED>static void _test(const double *, const double *, int);
 
 int main()
 {
-    size_t n = 1000000;
+    int n = 1000000;
 
     auto *x = (double *) aligned_alloc(32, n * sizeof(double));
     auto *y = (double *) aligned_alloc(32, n * sizeof(double));
@@ -54,18 +54,18 @@ int main()
 
 template<class ED>
 static void
-_test(const double *x, const double *y, size_t n)
+_test(const double *x, const double *y, int n)
 {
     StopWatch sw;
     ED ed;
 
     double time = 0.0, result = 0.0;
-    size_t qtd_tests = 100;
-    size_t toDivide = qtd_tests;
+    int qtd_tests = 100;
+    int toDivide = qtd_tests;
 
     sw.Restart();
     while (qtd_tests--)
-    	ed.calculate(x, y, n);
+        ed.calculate(x, y, n);
     time = sw.ElapsedUs();
 
     result = ed.calculate(x, y, n);
@@ -74,7 +74,7 @@ _test(const double *x, const double *y, size_t n)
     print_results(time, result);
 }
 
-void fill_vector(double *x, double *y, size_t n)
+void fill_vector(double *x, double *y, int n)
 {
     mt19937 e2;
     uniform_real_distribution<> dist(1, 151);
@@ -87,7 +87,7 @@ void fill_vector(double *x, double *y, size_t n)
 
 void print_results(double time, double result)
 {
-    cout << "ELAPSED TIME:   " << time/1000000 << "s" << endl;
+    cout << "ELAPSED TIME:   " << time / 1000000 << "s" << endl;
     cout.precision(17);
     cout << "      RESULT:   " << result << "\n" << endl;
     cout << "\n" << endl;

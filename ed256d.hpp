@@ -11,9 +11,9 @@
 class Double256 : public EuclideanDistance
 {
 public:
-    double calculate(const double *x,const double *y, size_t n) override ;
+    double calculate(const double *x,const double *y, int n) override ;
 private:
-    static double remaining(const double *x,const double *y, size_t n);
+    static double remaining(const double *x,const double *y, int n);
 };
 
 #endif //ED256D_HPP
