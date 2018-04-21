@@ -30,8 +30,8 @@ Double256::calculate(const double *x, const double *y, int n)
 
     /*
      *   in -> {  w  ,  x  ,  y  ,  z  }
-     *   in -> {  x  ,  w  ,  z  ,  y  }
-     *  out -> { w+x , x+w , y+z , z+y }
+     *   in -> {  a  ,  b  ,  c  ,  d  }
+     *  out -> { w+a , x+b , y+c , z+d }
      */
     const __m256d sum1 =
         _mm256_add_pd(shuffle, euclidean);
@@ -45,8 +45,8 @@ Double256::calculate(const double *x, const double *y, int n)
 
     /*
      *   in -> {  w  ,  x  ,  y  ,  z  }
-     *   in -> {  x  ,  w  ,  z  ,  y  }
-     *  out -> { w+x , x+w , y+z , z+y }
+     *   in -> {  a  ,  b  ,  c  ,  d  }
+     *  out -> { w+a , x+b , y+c , z+d }
      */
     const __m256d sum2 =
         _mm256_add_pd(sum1, permute);
