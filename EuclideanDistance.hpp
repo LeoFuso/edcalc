@@ -9,17 +9,18 @@ class EuclideanDistance
 {
 public:
     EuclideanDistance() = default;
-    virtual ~EuclideanDistance()= default;
-    virtual double calculate(const double *x,const double *y, int n) = 0;
+    virtual ~EuclideanDistance() = default;
+    virtual double calculate(const double *x, const double *y, int n) = 0;
 
-    double sqrt(double t)
+    double
+    sqrt(double t)
     {
-        double r = t/2;
+        double r = t / 2;
         int precision = 25;
 
         for (; precision > 1; precision -= 1)
 
-            r = (r+t/r)/2;
+            r = (r + t / r) / 2;
 
         return r;
     }
