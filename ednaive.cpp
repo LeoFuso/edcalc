@@ -4,10 +4,12 @@
 
 #include "ednaive.hpp"
 
-
-double Baseline::calculate(const double *x, const double *y, int n) {
+double
+Baseline::calculate(const double *x, const double *y, int n)
+{
     double result = 0;
-    for (; n > 0; --n) {
+    for (; n > 0; --n)
+    {
         const double num = x[n] - y[n];
         result += num * num;
     }
