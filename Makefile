@@ -27,7 +27,7 @@ StopWatch.cpp.o: StopWatch.cpp
 
 $(OBJ_DIR)/baseline: main.cpp ednaive.cpp.o StopWatch.cpp.o
 	mkdir -p $(OBJ_DIR)
-	$(CXX) $(CXXFLAGS) $^ -D_BASELINE -o $@
+	$(CXX) $(CXXFLAGS_NOOPT) $^ -D_BASELINE -o $@
 
 $(OBJ_DIR)/ed128: main.cpp ed128d.cpp.o StopWatch.cpp.o
 	mkdir -p $(OBJ_DIR)
