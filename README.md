@@ -12,7 +12,8 @@ Caso contrário, só será possível o `build` das implementações.
 
 ```
 $ make
-$ ./build/baseline
+$ ./build/naive0
+$ ./build/naive2
 $ ./build/ed128
 $ ./build/ed256
 $ make clean
