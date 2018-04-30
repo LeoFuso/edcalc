@@ -23,8 +23,24 @@ set_property(TARGET naive2 PROPERTY COMPILE_FLAGS ${CXXFLAGS_O2})
 set_property(TARGET ed128 PROPERTY COMPILE_FLAGS ${CXXFLAGS_SSE2})
 set_property(TARGET ed256 PROPERTY COMPILE_FLAGS ${CXXFLAGS_AVX2})
 
+
 set(CMAKE_BINARY_DIR ${PROJECT_BINARY_DIR}/bin)
 
+add_executable(baseline0 main.cpp StopWatch.cpp)
+add_executable(baseline2 main.cpp StopWatch.cpp)
+add_executable(128d main.cpp StopWatch.cpp)
+add_executable(256d main.cpp StopWatch.cpp)
 
+set_property(TARGET baseline0 PROPERTY VARIABLE "-D_BASELINE")
+set_property(TARGET baseline2 PROPERTY VARIABLE "-D_BASELINE")
+set_property(TARGET 128d PROPERTY VARIABLE "-D_DOUBLE128")
+set_property(TARGET 256d PROPERTY VARIABLE "-D_DOUBLE256")
+
+target_link_libraries(baseline0 naive0)
+target_link_libraries(baseline2 naive2)
+target_link_libraries(128d ed128)
+target_link_libraries(256d ed256)
+
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 #set(SOURCE_FILES main.cpp StopWatch.cpp ednaive.cpp ed128d.cpp ed256d.cpp EuclideanDistance.hpp)
 #add_executable(main ${SOURCE_FILES})
