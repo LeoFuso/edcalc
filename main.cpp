@@ -7,17 +7,17 @@
 #define TOSTR(x) TOSTR1(x)
 
 #if defined(_BASELINE)
-#include "ednaive.hpp"
+#include "ed_naive.hpp"
 #define _METHOD Baseline
 #elif defined(_DOUBLE128)
-#include "ed128d.hpp"
+#include "ed_128d.hpp"
 #define _METHOD Double128
 #elif defined(_DOUBLE256)
-#include "ed256d.hpp"
+#include "ed_256d.hpp"
 #define _METHOD Double256
 #else
 #warning Using BASELINE method as default...
-#include "ednaive.hpp"
+#include "ed_baseline.hpp"
 #define _METHOD Baseline
 #endif
 
@@ -33,13 +33,13 @@ struct Test
     }
 };
 
-void fill_vector(double *x, double *y, size_t n);
-void print_results(double time, double result);
-template<class ED>static void _test(const double *, const double *, size_t);
+void fill_vector(double *, double *, unsigned long);
+void print_results(double, double);
+template<class ED>static void _test(const double *, const double *, unsigned long);
 
 int main()
 {
-    size_t n = 1000000;
+    unsigned long n = 1000000;
 
     auto *x = (double *) aligned_alloc(32, n * sizeof(double));
     auto *y = (double *) aligned_alloc(32, n * sizeof(double));
@@ -54,7 +54,7 @@ int main()
 
 template<class ED>
 static void
-_test(const double *x, const double *y, size_t n)
+_test(const double *x, const double *y, unsigned long n)
 {
     StopWatch sw;
     ED ed;
@@ -74,7 +74,7 @@ _test(const double *x, const double *y, size_t n)
     print_results(time, result);
 }
 
-void fill_vector(double *x, double *y, size_t n)
+void fill_vector(double *x, double *y, unsigned long n)
 {
     mt19937 e2;
     uniform_real_distribution<> dist(1, 151);

@@ -1,7 +1,7 @@
 #ifndef ED_BASELINE_HPP
 #define ED_BASELINE_HPP
 
-#include "EuclideanDistance.hpp"
+#include "euclidean_distance.hpp"
 
 class Baseline : public EuclideanDistance
 {

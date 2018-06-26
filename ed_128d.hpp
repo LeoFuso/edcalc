@@ -1,7 +1,7 @@
 #ifndef ED_128D_HPP
 #define ED_128D_HPP
 
-#include "EuclideanDistance.hpp"
+#include "euclidean_distance.hpp"
 #include <xmmintrin.h>
 
 class Double128 : public EuclideanDistance

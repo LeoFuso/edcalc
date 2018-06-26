@@ -1,7 +1,7 @@
 #ifndef ED_256D_HPP
 #define ED_256D_HPP
 
-#include "EuclideanDistance.hpp"
+#include "euclidean_distance.hpp"
 #include <immintrin.h>
 
 class Double256 : public EuclideanDistance

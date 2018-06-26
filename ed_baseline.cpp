@@ -1,4 +1,4 @@
-#include "edbaseline.hpp"
+#include "ed_baseline.hpp"
 
 double
 Baseline::calculate(const double *x, const double *y, unsigned long size)

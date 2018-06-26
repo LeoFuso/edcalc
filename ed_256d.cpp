@@ -1,4 +1,4 @@
-#include "ed256d.hpp"
+#include "ed_256d.hpp"
 
 double
 Double256::calculate(const double *x, const double *y, unsigned long size)
