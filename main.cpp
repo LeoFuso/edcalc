@@ -7,7 +7,7 @@
 #define TOSTR(x) TOSTR1(x)
 
 #if defined(_BASELINE)
-#include "ed_naive.hpp"
+#include "ed_baseline.hpp"
 #define _METHOD Baseline
 #elif defined(_DOUBLE128)
 #include "ed_128d.hpp"
@@ -46,7 +46,7 @@ int main()
 
     fill_vector(x, y, n);
 
-    std::cout << "\nUsing class: " << TOSTR(_METHOD) << std::endl;
+    std::cout << "\n Using class: " << TOSTR(_METHOD) << std::endl;
     _test<_METHOD>(x, y, n);
 
     return 0;
