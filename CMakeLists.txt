@@ -1,8 +1,20 @@
 cmake_minimum_required(VERSION 3.8)
 set(CMAKE_BUILD_TYPE Release)
-project(edcalclib VERSION 1.1.1 DESCRIPTION "It is part of one of several proposals, of algorithms more optimized to run in Python, through a simple import.")
+project(PyEDistance)
 
 set(CMAKE_VERBOSE_MAKEFILE on)
+
+set(PyEDistance_NAME "PyEDistance Library")
+message(STATUS "${PyEDistance_NAME}")
+
+set(PyEDistance_VERSION_MAJOR "1")
+set(PyEDistance_VERSION_MINOR "0")
+set(PyEDistance_VERSION_PATCH "0")
+
+set(PyEDistance_VERSION "${PyEDistance_VERSION_MAJOR}.")
+set(PyEDistance_VERSION "${PyEDistance_VERSION}${PyEDistance_VERSION_MINOR}.")
+set(PyEDistance_VERSION "${PyEDistance_VERSION}${PyEDistance_VERSION_PATCH}")
+message(STATUS "version: ${PyEDistance_VERSION}")
 
 # Set the reference standard of the C++ Language
 set(CMAKE_CXX_STANDARD 11)
