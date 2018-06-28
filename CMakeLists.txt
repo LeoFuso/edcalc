@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.8)
 set(CMAKE_BUILD_TYPE Release)
 project(PyEDistance)
 
-set(CMAKE_VERBOSE_MAKEFILE on)
+# For development, only,
+# Comment the next line after the project is working properly
+# set(CMAKE_VERBOSE_MAKEFILE on)
 
 set(PyEDistance_NAME "PyEDistance Library")
 message(STATUS "${PyEDistance_NAME}")
@@ -44,20 +46,22 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 add_library(naive0 SHARED ed_baseline.cpp ed_baseline.hpp euclidean_distance.hpp)
 add_library(naive2 SHARED ed_baseline.cpp ed_baseline.hpp euclidean_distance.hpp)
+add_library(naive3 SHARED ed_baseline.cpp ed_baseline.hpp euclidean_distance.hpp)
 add_library(ed128 SHARED ed_128d.cpp  ed_128d.hpp euclidean_distance.hpp)
 add_library(ed256 SHARED ed_256d.cpp ed_256d.hpp euclidean_distance.hpp)
 
 set_property(TARGET naive0 PROPERTY COMPILE_FLAGS ${CXXFLAGS_O0})
 set_property(TARGET naive2 PROPERTY COMPILE_FLAGS ${CXXFLAGS_O2})
+set_property(TARGET naive3 PROPERTY COMPILE_FLAGS ${CXXFLAGS_SSE2})
 set_property(TARGET ed128 PROPERTY COMPILE_FLAGS ${CXXFLAGS_SSE2})
 set_property(TARGET ed256 PROPERTY COMPILE_FLAGS ${CXXFLAGS_AVX2})
 
 add_library(benchmark SHARED benchmark.cpp benchmark.hpp StopWatch.cpp euclidean_distance.hpp)
 
-add_executable(main main.cpp)
+add_executable(main_O0 main.cpp)
+add_executable(main_O2 main.cpp)
+add_executable(main_O3 main.cpp)
 
-target_link_libraries(main benchmark naive0 ed128 ed256)
-
-
-#set(SOURCE_FILES main.cpp StopWatch.cpp ednaive.cpp ed128d.cpp ed256d.cpp EuclideanDistance.hpp)
-#add_executable(main ${SOURCE_FILES})
+target_link_libraries(main_O0 benchmark naive0 ed128 ed256)
+target_link_libraries(main_O2 benchmark naive2 ed128 ed256)
+target_link_libraries(main_O3 benchmark naive3 ed128 ed256)
