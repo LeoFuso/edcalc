@@ -11,7 +11,7 @@ Benchmark::~Benchmark(unsigned long size)
 }
 
 void
-Benchmark::perform(EuclideanDistance *ed, unsigned long qtd_tests)
+Benchmark::perform(EuclideanDistance ed, unsigned long qtd_tests)
 {
 	StopWatch sw;
 
@@ -26,11 +26,11 @@ Benchmark::perform(EuclideanDistance *ed, unsigned long qtd_tests)
 	sw.Restart();
 	while (qtd_tests--)
 	{
-		ed->calculate(x, y, n);
+		ed.calculate(x, y, n);
 	}
 	time = sw.ElapsedUs();
 
-	result = ed->calculate(x, y, n);
+	result = ed.calculate(x, y, n);
 	time /= toDivide;
 
 	print_results(ed, time, result);
@@ -50,15 +50,15 @@ Benchmark::fill_vector(double *x, double *y, unsigned long n)
 }
 
 void
-Benchmark::print_results(EuclideanDistance *ed, double time, double result)
+Benchmark::print_results(EuclideanDistance ed, double time, double result)
 {
 
-	cout << "\n" << endl;
-	cout << " USING CLASS:   " << getClassName(ed) << endl;
-	cout << "ELAPSED TIME:   " << time/1000000 << "s" << endl;
-	cout.precision(17);
-	cout << "      RESULT:   " << result << "\n" << endl;
-	cout << "\n" << endl;
+	std::cout << "\n" << std::endl;
+	std::cout << " USING CLASS:   " << getClassName(ed) << std::endl;
+	std::cout << "ELAPSED TIME:   " << time/1000000 << "s" << std::endl;
+	std::cout.precision(17);
+	std::cout << "      RESULT:   " << result << "\n" << std::endl;
+	std::cout << "\n" << std::endl;
 }
 
 const char *

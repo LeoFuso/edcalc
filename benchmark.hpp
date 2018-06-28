@@ -17,16 +17,16 @@ private:
 	fill_vector(double *, double *, unsigned long);
 
 	static void
-	print_results(EuclideanDistance *,double, double);
+	print_results(EuclideanDistance,double, double);
 
 	static template<typename T>
 	const char *
 	getClassName(T);
 
 public:
-	~Benchmark(unsigned long);
+	Benchmark(unsigned long);
 	void
-	perform(EuclideanDistance *);
+	perform(EuclideanDistance);
 };
 
 #endif //BENCHMARK_HPP
