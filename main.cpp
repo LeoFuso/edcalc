@@ -6,16 +6,18 @@
 int
 main()
 {
-	EuclideanDistance * baseline = new Baseline;
-	EuclideanDistance * double128 = new Double128;
-	EuclideanDistance * double256 = new Double256;
+	auto * baseline = new Baseline;
+	auto * double128 = new Double128;
+	auto * double256 = new Double256;
 
-	unsigned long size = 1000000;
-	Benchmark benchmark(size);
+	unsigned long array_size = 1000000;
+	unsigned long num_tests = 100;
 
-	benchmark.perform(baseline, 100);
-	benchmark.perform(double128, 100);
-	benchmark.perform(double256, 100);
+	Benchmark benchmark(array_size, num_tests);
+
+	benchmark.perform(baseline);
+	benchmark.perform(double128);
+	benchmark.perform(double256);
 
 	return 0;
 }
