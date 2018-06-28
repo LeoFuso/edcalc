@@ -57,9 +57,9 @@ Benchmark::print_results(EuclideanDistance * ed, double time, double result)
 
 	std::cout << "\n" << std::endl;
 	std::cout << " USING CLASS:   " << Benchmark::getClassName(ed) << std::endl;
-	std::cout.precision(17);
+	std::cout.precision(12);
 	std::cout << "ELAPSED TIME:   " << time/1000000 << "s" << std::endl;
-	std::cout.precision(17);
+	std::cout.precision(12);
 	std::cout << "      RESULT:   " << result << "\n" << std::endl;
 	std::cout << "\n" << std::endl;
 }
