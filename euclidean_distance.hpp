@@ -11,7 +11,10 @@ public:
 	virtual double
 	calculate(const double *x, const double *y, unsigned long n) = 0;
 
-	/*  Newton's method (also known as the Newton–Raphson method) */
+	/*
+	 * Newton's method (also known as the Newton–Raphson method)
+	 * to calculate the square root of a positive number
+	 */
 	double
 	sqrt(double t)
 	{
