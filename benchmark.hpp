@@ -10,6 +10,7 @@ class Benchmark
 {
 private:
 	unsigned long size;
+	unsigned long n_tests;
 	double *x;
 	double *y;
 
@@ -19,15 +20,14 @@ private:
 	static void
 	print_results(EuclideanDistance *, double, double);
 
-	template<typename T>
 	static const char *
-	getClassName(T);
+	getClassName(EuclideanDistance*);
 
 public:
-	Benchmark(unsigned long);
+	Benchmark(unsigned long, unsigned long);
 
 	void
-	perform(EuclideanDistance *, unsigned long);
+	perform(EuclideanDistance *);
 };
 
 #endif //BENCHMARK_HPP
