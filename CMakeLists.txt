@@ -42,7 +42,6 @@ set(CMAKE_BINARY_DIR ${PROJECT_BINARY_DIR}/bin)
 # Set the output directory for the executables
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
-
 add_library(naive0 SHARED ed_baseline.cpp ed_baseline.hpp euclidean_distance.hpp)
 add_library(naive2 SHARED ed_baseline.cpp ed_baseline.hpp euclidean_distance.hpp)
 add_library(ed128 SHARED ed_128d.cpp  ed_128d.hpp euclidean_distance.hpp)
@@ -53,20 +52,11 @@ set_property(TARGET naive2 PROPERTY COMPILE_FLAGS ${CXXFLAGS_O2})
 set_property(TARGET ed128 PROPERTY COMPILE_FLAGS ${CXXFLAGS_SSE2})
 set_property(TARGET ed256 PROPERTY COMPILE_FLAGS ${CXXFLAGS_AVX2})
 
-add_executable(baseline0 main.cpp StopWatch.cpp)
-add_executable(baseline2 main.cpp StopWatch.cpp)
-add_executable(128d main.cpp StopWatch.cpp)
-add_executable(256d main.cpp StopWatch.cpp)
+add_library(benchmark SHARED benchmark.cpp benchmark.hpp StopWatch.cpp euclidean_distance.hpp)
 
-set_property(TARGET baseline0 PROPERTY VARIABLE "_BASELINE")
-set_property(TARGET baseline2 PROPERTY VARIABLE "_BASELINE")
-set_property(TARGET 128d PROPERTY VARIABLE "_DOUBLE128")
-set_property(TARGET 256d PROPERTY VARIABLE "_DOUBLE256")
+add_executable(main main.cpp)
 
-target_link_libraries(baseline0 naive0)
-target_link_libraries(baseline2 naive2)
-target_link_libraries(128d ed128)
-target_link_libraries(256d ed256)
+target_link_libraries(main benchmark naive0 ed128 ed256)
 
 
 #set(SOURCE_FILES main.cpp StopWatch.cpp ednaive.cpp ed128d.cpp ed256d.cpp EuclideanDistance.hpp)
