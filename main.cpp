@@ -1,21 +1,21 @@
-#import "benchmark.hpp"
-#import "ed_baseline.hpp"
-#import "ed_128d.hpp"
-#import "ed_256d.hpp"
+#include "benchmark.hpp"
+#include "ed_baseline.hpp"
+#include "ed_128d.hpp"
+#include "ed_256d.hpp"
 
 int
 main()
 {
-	EuclideanDistance baseline = Baseline();
-	EuclideanDistance double128 = Double128();
-	EuclideanDistance double256 = Double256();
+	EuclideanDistance * baseline = new Baseline;
+	EuclideanDistance * double128 = new Double128;
+	EuclideanDistance * double256 = new Double256;
 
 	unsigned long size = 1000000;
 	Benchmark benchmark(size);
 
-	benchmark.perform(baseline);
-	benchmark.perform(double128);
-	benchmark.perform(double256);
+	benchmark.perform(baseline, 100);
+	benchmark.perform(double128, 100);
+	benchmark.perform(double256, 100);
 
 	return 0;
 }
