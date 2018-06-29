@@ -25,6 +25,7 @@ Benchmark::perform(EuclideanDistance * ed)
 	double result = 0.0;
 	unsigned long toDivide = Benchmark::n_tests;
 	unsigned long do_tests = Benchmark::n_tests;
+
 	sw.Restart();
 	while (do_tests--)
 	{
