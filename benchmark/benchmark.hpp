@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <random>
-#include "euclidean_distance.hpp"
+#include "../euclidean_distance/euclidean_distance.hpp"
 #include "StopWatch.hpp"
 
 class Benchmark

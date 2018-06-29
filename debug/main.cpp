@@ -1,7 +1,7 @@
-#include "benchmark.hpp"
-#include "ed_baseline.hpp"
-#include "ed_128d.hpp"
-#include "ed_256d.hpp"
+#include "../benchmark/benchmark.hpp"
+#include "../euclidean_distance/ed_baseline.hpp"
+#include "../euclidean_distance/ed_128d.hpp"
+#include "../euclidean_distance/ed_256d.hpp"
 
 int
 main()

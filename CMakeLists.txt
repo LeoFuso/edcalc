@@ -44,11 +44,11 @@ set(CMAKE_BINARY_DIR ${PROJECT_BINARY_DIR}/bin)
 # Set the output directory for the executables
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
-add_library(naive0 SHARED ed_baseline.cpp ed_baseline.hpp euclidean_distance.hpp)
-add_library(naive2 SHARED ed_baseline.cpp ed_baseline.hpp euclidean_distance.hpp)
-add_library(naive3 SHARED ed_baseline.cpp ed_baseline.hpp euclidean_distance.hpp)
-add_library(ed128 SHARED ed_128d.cpp  ed_128d.hpp euclidean_distance.hpp)
-add_library(ed256 SHARED ed_256d.cpp ed_256d.hpp euclidean_distance.hpp)
+add_library(naive0 SHARED euclidean_distance/ed_baseline.cpp euclidean_distance/ed_baseline.hpp euclidean_distance/euclidean_distance.hpp)
+add_library(naive2 SHARED euclidean_distance/ed_baseline.cpp euclidean_distance/ed_baseline.hpp euclidean_distance/euclidean_distance.hpp)
+add_library(naive3 SHARED euclidean_distance/ed_baseline.cpp euclidean_distance/ed_baseline.hpp euclidean_distance/euclidean_distance.hpp)
+add_library(ed128 SHARED euclidean_distance/ed_128d.cpp euclidean_distance/ed_128d.hpp euclidean_distance/euclidean_distance.hpp)
+add_library(ed256 SHARED euclidean_distance/ed_256d.cpp euclidean_distance/ed_256d.hpp euclidean_distance/euclidean_distance.hpp)
 
 set_property(TARGET naive0 PROPERTY COMPILE_FLAGS ${CXXFLAGS_O0})
 set_property(TARGET naive2 PROPERTY COMPILE_FLAGS ${CXXFLAGS_O2})
@@ -56,11 +56,11 @@ set_property(TARGET naive3 PROPERTY COMPILE_FLAGS ${CXXFLAGS_SSE2})
 set_property(TARGET ed128 PROPERTY COMPILE_FLAGS ${CXXFLAGS_SSE2})
 set_property(TARGET ed256 PROPERTY COMPILE_FLAGS ${CXXFLAGS_AVX2})
 
-add_library(benchmark SHARED benchmark.cpp benchmark.hpp StopWatch.cpp euclidean_distance.hpp)
+add_library(benchmark SHARED benchmark/benchmark.cpp benchmark/benchmark.hpp benchmark/StopWatch.cpp euclidean_distance/euclidean_distance.hpp)
 
-add_executable(main_O0 main.cpp)
-add_executable(main_O2 main.cpp)
-add_executable(main_O3 main.cpp)
+add_executable(main_O0 debug/main.cpp)
+add_executable(main_O2 debug/main.cpp)
+add_executable(main_O3 debug/main.cpp)
 
 target_link_libraries(main_O0 benchmark naive0 ed128 ed256)
 target_link_libraries(main_O2 benchmark naive2 ed128 ed256)
