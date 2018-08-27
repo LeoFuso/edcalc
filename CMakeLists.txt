@@ -11,7 +11,7 @@ message(STATUS "${PyEDistance_NAME}")
 
 set(PyEDistance_VERSION_MAJOR "1")
 set(PyEDistance_VERSION_MINOR "0")
-set(PyEDistance_VERSION_PATCH "0")
+set(PyEDistance_VERSION_PATCH "1")
 
 set(PyEDistance_VERSION "${PyEDistance_VERSION_MAJOR}.")
 set(PyEDistance_VERSION "${PyEDistance_VERSION}${PyEDistance_VERSION_MINOR}.")
