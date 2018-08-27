@@ -4,7 +4,7 @@ project(PyEDistance)
 
 # For development, only,
 # Comment the next line after the project is working properly
-# set(CMAKE_VERBOSE_MAKEFILE on)
+set(CMAKE_VERBOSE_MAKEFILE on)
 
 set(PyEDistance_NAME "PyEDistance Library")
 message(STATUS "${PyEDistance_NAME}")
