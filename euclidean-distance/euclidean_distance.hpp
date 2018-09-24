@@ -18,12 +18,12 @@ public:
 	double
 	sqrt(double t)
 	{
-		double r = t/2;
+		double r = t / 2;
 		int precision = 25;
 
 		for (; precision > 1; precision -= 1)
 
-			r = (r + t/r)/2;
+			r = (r + t / r) / 2;
 
 		return r;
 	}

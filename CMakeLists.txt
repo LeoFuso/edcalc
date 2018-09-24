@@ -4,14 +4,14 @@ project(PyEDistance)
 
 # For development, only,
 # Comment the next line after the project is working properly
-set(CMAKE_VERBOSE_MAKEFILE on)
+#set(CMAKE_VERBOSE_MAKEFILE on)
 
 set(PyEDistance_NAME "PyEDistance Library")
 message(STATUS "${PyEDistance_NAME}")
 
 set(PyEDistance_VERSION_MAJOR "1")
 set(PyEDistance_VERSION_MINOR "0")
-set(PyEDistance_VERSION_PATCH "1")
+set(PyEDistance_VERSION_PATCH "2")
 
 set(PyEDistance_VERSION "${PyEDistance_VERSION_MAJOR}.")
 set(PyEDistance_VERSION "${PyEDistance_VERSION}${PyEDistance_VERSION_MINOR}.")
@@ -34,6 +34,7 @@ set(CXXFLAGS_O2 "-O2 -finline-functions -funswitch-loops -fpredictive-commoning 
 set(CXXFLAGS_SSE2 "-O3 -march=native")
 set(CXXFLAGS_AVX2 "-O3 -march=native -mavx2")
 
+### Output
 
 # Set the output directory for the .so
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
@@ -44,11 +45,14 @@ set(CMAKE_BINARY_DIR ${PROJECT_BINARY_DIR}/bin)
 # Set the output directory for the executables
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
-add_library(naive0 SHARED euclidean_distance/ed_baseline.cpp euclidean_distance/ed_baseline.hpp euclidean_distance/euclidean_distance.hpp)
-add_library(naive2 SHARED euclidean_distance/ed_baseline.cpp euclidean_distance/ed_baseline.hpp euclidean_distance/euclidean_distance.hpp)
-add_library(naive3 SHARED euclidean_distance/ed_baseline.cpp euclidean_distance/ed_baseline.hpp euclidean_distance/euclidean_distance.hpp)
-add_library(ed128 SHARED euclidean_distance/ed_128d.cpp euclidean_distance/ed_128d.hpp euclidean_distance/euclidean_distance.hpp)
-add_library(ed256 SHARED euclidean_distance/ed_256d.cpp euclidean_distance/ed_256d.hpp euclidean_distance/euclidean_distance.hpp)
+
+### Build
+
+add_library(naive0 SHARED euclidean-distance/ed_baseline.cpp euclidean-distance/ed_baseline.hpp euclidean-distance/euclidean_distance.hpp)
+add_library(naive2 SHARED euclidean-distance/ed_baseline.cpp euclidean-distance/ed_baseline.hpp euclidean-distance/euclidean_distance.hpp)
+add_library(naive3 SHARED euclidean-distance/ed_baseline.cpp euclidean-distance/ed_baseline.hpp euclidean-distance/euclidean_distance.hpp)
+add_library(ed128 SHARED euclidean-distance/ed_128d.cpp euclidean-distance/ed_128d.hpp euclidean-distance/euclidean_distance.hpp)
+add_library(ed256 SHARED euclidean-distance/ed_256d.cpp euclidean-distance/ed_256d.hpp euclidean-distance/euclidean_distance.hpp)
 
 set_property(TARGET naive0 PROPERTY COMPILE_FLAGS ${CXXFLAGS_O0})
 set_property(TARGET naive2 PROPERTY COMPILE_FLAGS ${CXXFLAGS_O2})
@@ -56,7 +60,40 @@ set_property(TARGET naive3 PROPERTY COMPILE_FLAGS ${CXXFLAGS_SSE2})
 set_property(TARGET ed128 PROPERTY COMPILE_FLAGS ${CXXFLAGS_SSE2})
 set_property(TARGET ed256 PROPERTY COMPILE_FLAGS ${CXXFLAGS_AVX2})
 
-add_library(benchmark SHARED benchmark/benchmark.cpp benchmark/benchmark.hpp benchmark/StopWatch.cpp euclidean_distance/euclidean_distance.hpp)
+###################
+### INTEGRATION ###
+###################
+
+# Create the Distance_C_Adapter.so artifact
+add_library(Distance_C_Adapter SHARED adapter/c/Distance_C_Adapter.cpp)
+
+# Link the two libraries, so they can be used later,
+# also, needs to be aplicable for all the implementations, not just one of them.
+target_link_libraries(Distance_C_Adapter naive0)
+
+# Create the C_Distance.so artifact
+add_library(C_Distance SHARED adapter/c/C_Distance.c)
+
+# Link the C_Distance lib with the Distance_C_Adapter lib
+target_link_libraries(C_Distance Distance_C_Adapter)
+
+
+# Set the Python version to default in the OS
+find_package(PythonLibs REQUIRED)
+include_directories(${PYTHON_INCLUDE_DIRS})
+
+add_library(DistancePy SHARED adapter/python/EuclideanDistanceAdapter.c)
+target_link_libraries(DistancePy C_Distance ${PYTHON_LIBRARIES})
+
+###################
+###################
+###################
+
+###################
+### DEBUG #########
+###################
+
+add_library(benchmark SHARED benchmark/benchmark.cpp benchmark/benchmark.hpp benchmark/StopWatch.cpp euclidean-distance/euclidean_distance.hpp)
 
 add_executable(main_O0 debug/main.cpp)
 add_executable(main_O2 debug/main.cpp)
@@ -65,3 +102,12 @@ add_executable(main_O3 debug/main.cpp)
 target_link_libraries(main_O0 benchmark naive0 ed128 ed256)
 target_link_libraries(main_O2 benchmark naive2 ed128 ed256)
 target_link_libraries(main_O3 benchmark naive3 ed128 ed256)
+
+# main.py
+# Copy the Python's main file to the library directory
+file(COPY debug/main.py DESTINATION ${PROJECT_BINARY_DIR}/lib)
+
+###################
+###################
+###################
+
