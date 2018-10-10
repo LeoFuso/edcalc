@@ -1,22 +1,22 @@
 cmake_minimum_required(VERSION 3.8)
 set(CMAKE_BUILD_TYPE Release)
-project(PyEDistance)
+project(PyDistance)
 
 # For development, only,
 # Comment the next line after the project is working properly
-#set(CMAKE_VERBOSE_MAKEFILE on)
+set(CMAKE_VERBOSE_MAKEFILE on)
 
-set(PyEDistance_NAME "PyEDistance Library")
-message(STATUS "${PyEDistance_NAME}")
+set(PyDistance_NAME "PyDistance Library")
+message(STATUS "${PyDistance_NAME}")
 
-set(PyEDistance_VERSION_MAJOR "1")
-set(PyEDistance_VERSION_MINOR "0")
-set(PyEDistance_VERSION_PATCH "2")
+set(PyDistance_VERSION_MAJOR "1")
+set(PyDistance_VERSION_MINOR "0")
+set(PyDistance_VERSION_PATCH "2")
 
-set(PyEDistance_VERSION "${PyEDistance_VERSION_MAJOR}.")
-set(PyEDistance_VERSION "${PyEDistance_VERSION}${PyEDistance_VERSION_MINOR}.")
-set(PyEDistance_VERSION "${PyEDistance_VERSION}${PyEDistance_VERSION_PATCH}")
-message(STATUS "version: ${PyEDistance_VERSION}")
+set(PyDistance_VERSION "${PyDistance_VERSION_MAJOR}.")
+set(PyDistance_VERSION "${PyDistance_VERSION}${PyDistance_VERSION_MINOR}.")
+set(PyDistance_VERSION "${PyDistance_VERSION}${PyDistance_VERSION_PATCH}")
+message(STATUS "version: ${PyDistance_VERSION}")
 
 # Set the reference standard of the C++ Language
 set(CMAKE_CXX_STANDARD 11)
@@ -48,11 +48,11 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 ### Build
 
-add_library(naive0 SHARED euclidean-distance/ed_baseline.cpp euclidean-distance/ed_baseline.hpp euclidean-distance/euclidean_distance.hpp)
-add_library(naive2 SHARED euclidean-distance/ed_baseline.cpp euclidean-distance/ed_baseline.hpp euclidean-distance/euclidean_distance.hpp)
-add_library(naive3 SHARED euclidean-distance/ed_baseline.cpp euclidean-distance/ed_baseline.hpp euclidean-distance/euclidean_distance.hpp)
-add_library(ed128 SHARED euclidean-distance/ed_128d.cpp euclidean-distance/ed_128d.hpp euclidean-distance/euclidean_distance.hpp)
-add_library(ed256 SHARED euclidean-distance/ed_256d.cpp euclidean-distance/ed_256d.hpp euclidean-distance/euclidean_distance.hpp)
+add_library(naive0 SHARED distance-measure/baseline_distance.cpp distance-measure/baseline_distance.hpp distance-measure/distance_measure.hpp)
+add_library(naive2 SHARED distance-measure/baseline_distance.cpp distance-measure/baseline_distance.hpp distance-measure/distance_measure.hpp)
+add_library(naive3 SHARED distance-measure/baseline_distance.cpp distance-measure/baseline_distance.hpp distance-measure/distance_measure.hpp)
+add_library(ed128 SHARED distance-measure/__m128d__distance.cpp distance-measure/__m128d__distance.hpp distance-measure/distance_measure.hpp)
+add_library(ed256 SHARED distance-measure/__m256d__distance.cpp distance-measure/__m256d__distance.hpp distance-measure/distance_measure.hpp)
 
 set_property(TARGET naive0 PROPERTY COMPILE_FLAGS ${CXXFLAGS_O0})
 set_property(TARGET naive2 PROPERTY COMPILE_FLAGS ${CXXFLAGS_O2})
@@ -93,7 +93,7 @@ target_link_libraries(DistancePy C_Distance ${PYTHON_LIBRARIES})
 ### DEBUG #########
 ###################
 
-add_library(benchmark SHARED benchmark/benchmark.cpp benchmark/benchmark.hpp benchmark/StopWatch.cpp euclidean-distance/euclidean_distance.hpp)
+add_library(benchmark SHARED benchmark/benchmark.cpp benchmark/benchmark.hpp benchmark/StopWatch.cpp distance-measure/distance_measure.hpp)
 
 add_executable(main_O0 debug/main.cpp)
 add_executable(main_O2 debug/main.cpp)
