@@ -3,8 +3,8 @@
 
 #include <iostream>
 #include <random>
-#include "../euclidean-distance/euclidean_distance.hpp"
 #include "StopWatch.hpp"
+#include "../distance-measure/distance_measure.hpp"
 
 class Benchmark
 {
@@ -18,16 +18,13 @@ private:
 	fill_vector(double *, double *, unsigned long);
 
 	static void
-	print_results(EuclideanDistance *, double, double);
-
-	static const char *
-	getClassName(EuclideanDistance*);
+	print_results(DistanceMeasure *, double, double);
 
 public:
 	Benchmark(unsigned long, unsigned long);
 
 	void
-	perform(EuclideanDistance *);
+	perform(DistanceMeasure *);
 };
 
 #endif //BENCHMARK_HPP

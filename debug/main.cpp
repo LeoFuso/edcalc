@@ -1,17 +1,17 @@
 #include "../benchmark/benchmark.hpp"
-#include "../euclidean-distance/ed_baseline.hpp"
-#include "../euclidean-distance/ed_128d.hpp"
-#include "../euclidean-distance/ed_256d.hpp"
+#include "../distance-measure/baseline_distance.hpp"
+#include "../distance-measure/__m128d__distance.hpp"
+#include "../distance-measure/__m256d__distance.hpp"
 
 int
 main()
 {
-	auto * baseline = new Baseline;
-	auto * double128 = new Double128;
-	auto * double256 = new Double256;
+	auto * baseline = new BaselineDistance;
+	auto * double128 = new __m128d__Distance;
+	auto * double256 = new __m256d__Distance;
 
 	unsigned long array_size = 1000000;
-	unsigned long num_tests = 100;
+	unsigned long num_tests = 10;
 
 	Benchmark benchmark(array_size, num_tests);
 

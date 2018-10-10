@@ -1,5 +1,5 @@
 ### C++ / Python Integration
-### PyEDistance
+### PyDistance
 
 ## Build process
 
