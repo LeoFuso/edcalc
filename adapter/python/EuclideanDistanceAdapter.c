@@ -12,9 +12,6 @@ static const char message[4][30] =
 static PyObject *
 calculate_sequence_wrapper(PyObject *self, PyObject *args)
 {
-	/* Boolean check */
-	int error = 0;
-
 	/* The following element of an x array */
 	PyObject *x_sequence;
 
@@ -32,46 +29,38 @@ calculate_sequence_wrapper(PyObject *self, PyObject *args)
 	Py_ssize_t x_sequence_length;
 	Py_ssize_t y_sequence_length;
 
-	/* Check if the argument is iterable or not */
-	if (!PyArg_ParseTuple(args, "OO", &x_sequence, &y_sequence))
+	/* Performs the association between PyObject and the arguments passed to the function */
+	if(0 == PyArg_ParseTuple(args, "OO", &x_sequence, &y_sequence))
 	{
-		PyErr_SetString(PyExc_TypeError, message[0]);
+		PyErr_SetString(PyExc_TypeError, "euclidean() takes exactly 2 arguments");
 		return NULL;
 	}
 
 	/* store the argument as a PySequence_Fast into a PyObject variable */
-	x_sequence = PySequence_Fast(x_sequence, message[0]);
-	if (!x_sequence)
+	x_sequence = PySequence_Fast(x_sequence, "First argument must be sequence or iterable");
+	if (0 == x_sequence)
 		return NULL;
 
-	y_sequence = PySequence_Fast(y_sequence, message[0]);
+	y_sequence = PySequence_Fast(y_sequence, "Second argument must be sequence or iterable");
 	if (!y_sequence)
 		return NULL;
-
 
 	/*
 	 * Get the size of a given sequence
 	 */
 	x_sequence_length = PySequence_Fast_GET_SIZE(x_sequence);
-	if (x_sequence_length  == 0)
-	{
-		PyErr_SetString(PyExc_TypeError, message[1]);
-		return NULL;
-	}
-
 	y_sequence_length = PySequence_Fast_GET_SIZE(y_sequence);
-	if (y_sequence_length  == 0)
+	if (x_sequence_length  == 0 || y_sequence_length  == 0)
 	{
-		PyErr_SetString(PyExc_TypeError, message[1]);
+		PyErr_SetString(PyExc_TypeError, "Illegal size (0) of sequence");
 		return NULL;
 	}
 
 	if(x_sequence_length != y_sequence_length)
 	{
-		PyErr_SetString(PyExc_TypeError, message[2]);
+		PyErr_SetString(PyExc_TypeError, "Sequences differs in size");
 		return NULL;
 	}
-
 
 	x = (double *) calloc(x_sequence_length, sizeof(double));
 	y = (double *) calloc(y_sequence_length, sizeof(double));
@@ -132,13 +121,6 @@ calculate_sequence_wrapper(PyObject *self, PyObject *args)
 
 	free(x);
 	free(y);
-
-	char output[50];
-
-    snprintf(output, 50, "%f", result);
-
-    PyErr_SetString(PyExc_TypeError, output);
-    return NULL;
 
 	/*
 	 * and return the result as a PyLong
