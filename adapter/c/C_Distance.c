@@ -3,6 +3,7 @@
 double
 calculate(const double *x, const double *y, unsigned long n)
 {
+	/* The type of the C++ object */
 	Distance_type object = NULL;
 	double result = 0.0;
 
