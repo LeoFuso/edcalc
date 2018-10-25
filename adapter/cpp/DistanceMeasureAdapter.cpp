@@ -1,11 +1,12 @@
-#include "../../distance-measure/baseline_distance.hpp"
+#include "DistanceMeasureFactory.hpp"
 #include <Python.h>
 
 double
 euclidean(const double *x, const double *y, unsigned long n)
 {
-	auto *baseline = new BaselineDistance;
-	return baseline->euclidean(x, y, n);
+	auto *factory = new DistanceMeasureFactory();
+	auto *d_measure = factory->produce();
+	return d_measure->euclidean(x, y, n);
 }
 
 PyObject *
