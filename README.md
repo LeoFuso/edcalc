@@ -8,7 +8,6 @@ mkdir build
 cd build
 cmake ..
 make
-./bin/main_O0
-./bin/main_O2
-./bin/main_O3
+cd lib
+python main.py
 ```
