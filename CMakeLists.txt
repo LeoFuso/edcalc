@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.8)
-set(CMAKE_BUILD_TYPE Release)
+#set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Debug)
 project(PyDistance)
 
 # For development, only,
 # Comment the next line after the project is working properly
-set(CMAKE_VERBOSE_MAKEFILE on)
+# set(CMAKE_VERBOSE_MAKEFILE on)
 
 set(PyDistance_NAME "PyDistance Library")
 message(STATUS "${PyDistance_NAME}")
@@ -83,7 +84,12 @@ find_package(PythonLibs REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIRS})
 
 add_library(DistancePy SHARED adapter/python/EuclideanDistanceAdapter.c)
+add_library(MathCustom SHARED adapter/cpp/MathCustom.cpp)
+add_library(DistanceMeasure SHARED adapter/cpp/DistanceMeasureAdapter.cpp)
+
 target_link_libraries(DistancePy C_Distance ${PYTHON_LIBRARIES})
+target_link_libraries(MathCustom ${PYTHON_LIBRARIES})
+target_link_libraries(DistanceMeasure naive0 ${PYTHON_LIBRARIES})
 
 ###################
 ###################
