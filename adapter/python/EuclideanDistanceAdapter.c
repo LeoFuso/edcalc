@@ -12,6 +12,8 @@ static const char message[4][30] =
 static PyObject *
 calculate_sequence_wrapper(PyObject *self, PyObject *args)
 {
+	/* Boolean check */
+	int error = 0;
 
 	/* The following element of an x array */
 	PyObject *x_sequence;
@@ -31,7 +33,7 @@ calculate_sequence_wrapper(PyObject *self, PyObject *args)
 	Py_ssize_t y_sequence_length;
 
 	/* Check if the argument is iterable or not */
-	if (!PyArg_ParseTuple(args, "isO|n", &PyList_Type, &x_sequence, &y_sequence))
+	if (!PyArg_ParseTuple(args, "OO", &x_sequence, &y_sequence))
 	{
 		PyErr_SetString(PyExc_TypeError, message[0]);
 		return NULL;
@@ -111,9 +113,9 @@ calculate_sequence_wrapper(PyObject *self, PyObject *args)
 			Py_DECREF(y_sequence);
 			free(x);
 			free(y);
-			PyErr_SetString(PyExc_TypeError, message[3]);
-			return NULL;
-		}
+            PyErr_SetString(PyExc_TypeError, message[3]);
+            return NULL;
+        }
 
 		x[i] = PyFloat_AS_DOUBLE(x_f_item);
 		y[i] = PyFloat_AS_DOUBLE(y_f_item);
@@ -130,6 +132,13 @@ calculate_sequence_wrapper(PyObject *self, PyObject *args)
 
 	free(x);
 	free(y);
+
+	char output[50];
+
+    snprintf(output, 50, "%f", result);
+
+    PyErr_SetString(PyExc_TypeError, output);
+    return NULL;
 
 	/*
 	 * and return the result as a PyLong
