@@ -12,7 +12,7 @@ message(STATUS "${PyDistance_NAME}")
 
 set(PyDistance_VERSION_MAJOR "1")
 set(PyDistance_VERSION_MINOR "1")
-set(PyDistance_VERSION_PATCH "0")
+set(PyDistance_VERSION_PATCH "1")
 
 set(PyDistance_VERSION "${PyDistance_VERSION_MAJOR}.")
 set(PyDistance_VERSION "${PyDistance_VERSION}${PyDistance_VERSION_MINOR}.")
@@ -69,13 +69,13 @@ set_property(TARGET ed256 PROPERTY COMPILE_FLAGS ${CXXFLAGS_AVX2})
 add_library(DistanceMeasureFactory SHARED adapter/cpp/DistanceMeasureFactory.cpp adapter/cpp/DistanceMeasureFactory.hpp)
 
 if ("${ATA_TYPE}" MATCHES "auto")
-    set_property(TARGET DistanceMeasureFactory PROPERTY VARIABLE "_0")
+    target_compile_definitions(DistanceMeasureFactory PRIVATE _0)
     target_link_libraries(DistanceMeasureFactory naive3)
 elseif ("${ATA_TYPE}" MATCHES "128")
-    set_property(TARGET DistanceMeasureFactory PROPERTY VARIABLE "_128")
+    target_compile_definitions(DistanceMeasureFactory PRIVATE _128)
     target_link_libraries(DistanceMeasureFactory ed128)
 elseif ("${ATA_TYPE}" MATCHES "256")
-    set_property(TARGET DistanceMeasureFactory PROPERTY VARIABLE "_256")
+    target_compile_definitions(DistanceMeasureFactory PRIVATE _256)
     target_link_libraries(DistanceMeasureFactory ed256)
 else()
     message (FATAL_ERROR "DataType '${ATA_TYPE}' not recognized")
@@ -105,9 +105,9 @@ add_executable(main_O0 debug/main.cpp)
 add_executable(main_O2 debug/main.cpp)
 add_executable(main_O3 debug/main.cpp)
 
-target_link_libraries(main_O0 benchmark naive0 ed128 ed256)
-target_link_libraries(main_O2 benchmark naive2 ed128 ed256)
-target_link_libraries(main_O3 benchmark naive3 ed128 ed256)
+target_link_libraries(main_O0 benchmark naive0 ed128 ed256 DistanceMeasureFactory)
+target_link_libraries(main_O2 benchmark naive2 ed128 ed256 DistanceMeasureFactory)
+target_link_libraries(main_O3 benchmark naive3 ed128 ed256 DistanceMeasureFactory)
 
 # main.py
 # Copy the Python's main file to the library directory
