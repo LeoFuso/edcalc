@@ -2,6 +2,7 @@
 #include "../distance-measure/baseline_distance.hpp"
 #include "../distance-measure/__m128d__distance.hpp"
 #include "../distance-measure/__m256d__distance.hpp"
+#include "../adapter/cpp/DistanceMeasureFactory.hpp"
 
 int
 main()
@@ -18,6 +19,10 @@ main()
 	benchmark.perform(baseline);
 	benchmark.perform(double128);
 	benchmark.perform(double256);
+
+	auto *factory = new DistanceMeasureFactory();
+	auto *d_measure = factory->produce();
+	benchmark.perform(d_measure);
 
 	return 0;
 }
