@@ -49,37 +49,43 @@ set_property(CACHE ATA_TYPE PROPERTY STRINGS auto 128 256)
 message(STATUS "DataType chosen: ${ATA_TYPE}")
 
 ### Build
-add_library(naive0 SHARED distance-measure/baseline_distance.cpp distance-measure/baseline_distance.hpp distance-measure/distance_measure.hpp)
-add_library(naive2 SHARED distance-measure/baseline_distance.cpp distance-measure/baseline_distance.hpp distance-measure/distance_measure.hpp)
-add_library(naive3 SHARED distance-measure/baseline_distance.cpp distance-measure/baseline_distance.hpp distance-measure/distance_measure.hpp)
-add_library(ed128 SHARED distance-measure/__m128d__distance.cpp distance-measure/__m128d__distance.hpp distance-measure/distance_measure.hpp)
-add_library(ed256 SHARED distance-measure/__m256d__distance.cpp distance-measure/__m256d__distance.hpp distance-measure/distance_measure.hpp)
-
-set_property(TARGET naive0 PROPERTY COMPILE_FLAGS ${CXXFLAGS_O0})
-set_property(TARGET naive2 PROPERTY COMPILE_FLAGS ${CXXFLAGS_O2})
-set_property(TARGET naive3 PROPERTY COMPILE_FLAGS ${CXXFLAGS_SSE2})
-set_property(TARGET ed128 PROPERTY COMPILE_FLAGS ${CXXFLAGS_SSE2})
-set_property(TARGET ed256 PROPERTY COMPILE_FLAGS ${CXXFLAGS_AVX2})
-
-###################
-### INTEGRATION ###
-###################
-
 # Create the DistanceMeasureFactory.so artifact
 add_library(DistanceMeasureFactory SHARED adapter/cpp/DistanceMeasureFactory.cpp adapter/cpp/DistanceMeasureFactory.hpp)
 
 if ("${ATA_TYPE}" MATCHES "auto")
+
+    add_library(distance SHARED distance-measure/baseline_distance.cpp distance-measure/baseline_distance.hpp distance-measure/distance_measure.hpp)
+    set_property(TARGET distance PROPERTY COMPILE_FLAGS ${CXXFLAGS_SSE2})
+
     target_compile_definitions(DistanceMeasureFactory PRIVATE _0)
-    target_link_libraries(DistanceMeasureFactory naive3)
+    target_link_libraries(DistanceMeasureFactory distance)
+
 elseif ("${ATA_TYPE}" MATCHES "128")
+
+    add_library(distance SHARED distance-measure/__m128d__distance.cpp distance-measure/__m128d__distance.hpp distance-measure/distance_measure.hpp)
+    set_property(TARGET distance PROPERTY COMPILE_FLAGS ${CXXFLAGS_SSE2})
+
     target_compile_definitions(DistanceMeasureFactory PRIVATE _128)
-    target_link_libraries(DistanceMeasureFactory ed128)
+    target_link_libraries(DistanceMeasureFactory distance)
+
 elseif ("${ATA_TYPE}" MATCHES "256")
+
+    add_library(distance SHARED distance-measure/__m256d__distance.cpp distance-measure/__m256d__distance.hpp distance-measure/distance_measure.hpp)
+    set_property(TARGET distance PROPERTY COMPILE_FLAGS ${CXXFLAGS_AVX2})
+
     target_compile_definitions(DistanceMeasureFactory PRIVATE _256)
-    target_link_libraries(DistanceMeasureFactory ed256)
+    target_link_libraries(DistanceMeasureFactory distance)
+
 else()
+
     message (FATAL_ERROR "DataType '${ATA_TYPE}' not recognized")
+
 endif()
+
+
+###################
+### INTEGRATION ###
+###################
 
 # Create the DistanceMeasure.so artifact
 add_library(PyDistance SHARED adapter/cpp/DistanceMeasureAdapter.cpp)
@@ -92,22 +98,13 @@ include_directories(${PYTHON_INCLUDE_DIRS})
 target_link_libraries(PyDistance DistanceMeasureFactory ${PYTHON_LIBRARIES})
 
 ###################
-###################
-###################
-
-###################
 ### DEBUG #########
 ###################
 
 add_library(benchmark SHARED benchmark/benchmark.cpp benchmark/benchmark.hpp benchmark/StopWatch.cpp distance-measure/distance_measure.hpp)
 
-add_executable(main_O0 debug/main.cpp)
-add_executable(main_O2 debug/main.cpp)
-add_executable(main_O3 debug/main.cpp)
-
-target_link_libraries(main_O0 benchmark naive0 ed128 ed256 DistanceMeasureFactory)
-target_link_libraries(main_O2 benchmark naive2 ed128 ed256 DistanceMeasureFactory)
-target_link_libraries(main_O3 benchmark naive3 ed128 ed256 DistanceMeasureFactory)
+add_executable(main debug/main.cpp)
+target_link_libraries(main benchmark DistanceMeasureFactory)
 
 # main.py
 # Copy the Python's main file to the library directory
