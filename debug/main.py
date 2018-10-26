@@ -1,11 +1,8 @@
-import DistancePy
-import DistanceMeasure as ds
+import PyDistance as pd
 
 x = [1, 2, 3, 4, 5, 6]
 y = [7, 8, 9, 10, 11, 12]
 
 print("Calculate Sequence of:\nVALUE: ", x)
-result = DistancePy.euclidean(x, y)
+result = pd.euclidean(x, y)
 print("RESULT: ", result)
-
-print("Distance Measure: ", ds.euclidean(x, y))

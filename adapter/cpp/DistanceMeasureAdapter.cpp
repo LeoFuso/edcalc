@@ -62,21 +62,21 @@ euclidean(PyObject *self, PyObject *args)
 	return PyFloat_FromDouble(result);
 }
 
-static PyMethodDef DistanceMeasure_methods[] = {
+static PyMethodDef PyDistance_methods[] = {
 	{"euclidean", (PyCFunction) euclidean, METH_VARARGS, nullptr},
 	{nullptr, nullptr, 0, nullptr}
 };
 
-static PyModuleDef DistanceMeasure_module = {
+static PyModuleDef PyDistance_module = {
 	PyModuleDef_HEAD_INIT,
-	"DistanceMeasure",
+	"PyDistance",
 	"Provides some functions, but faster",
 	0,
-	DistanceMeasure_methods
+	PyDistance_methods
 };
 
 PyMODINIT_FUNC
-PyInit_DistanceMeasure()
+PyInit_PyDistance()
 {
-	return PyModule_Create(&DistanceMeasure_module);
+	return PyModule_Create(&PyDistance_module);
 }
