@@ -11,8 +11,8 @@ set(PyDistance_NAME "PyDistance Library")
 message(STATUS "${PyDistance_NAME}")
 
 set(PyDistance_VERSION_MAJOR "1")
-set(PyDistance_VERSION_MINOR "0")
-set(PyDistance_VERSION_PATCH "2")
+set(PyDistance_VERSION_MINOR "1")
+set(PyDistance_VERSION_PATCH "0")
 
 set(PyDistance_VERSION "${PyDistance_VERSION_MAJOR}.")
 set(PyDistance_VERSION "${PyDistance_VERSION}${PyDistance_VERSION_MINOR}.")
@@ -22,12 +22,10 @@ message(STATUS "version: ${PyDistance_VERSION}")
 # Set the reference standard of the C++ Language
 set(CMAKE_CXX_STANDARD 11)
 
-
 # Remove the "lib" prefix from all library objects
-set(CMAKE_SHARED_LIBRARY_PREFIX  "")
+set(CMAKE_SHARED_LIBRARY_PREFIX "")
 # Set the ".so" suffix in all library objects
 set(CMAKE_SHARED_LIBRARY_SUFFIX ".so")
-
 
 ### Flags
 set(CXXFLAGS_O0 "-O0")
@@ -36,7 +34,6 @@ set(CXXFLAGS_SSE2 "-O3 -march=native")
 set(CXXFLAGS_AVX2 "-O3 -march=native -mavx2")
 
 ### Output
-
 # Set the output directory for the .so
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 
@@ -46,9 +43,12 @@ set(CMAKE_BINARY_DIR ${PROJECT_BINARY_DIR}/bin)
 # Set the output directory for the executables
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
+# Option to choose DataType usage
+set(ATA_TYPE "auto" CACHE STRING "DataType chosen")
+set_property(CACHE ATA_TYPE PROPERTY STRINGS auto 128 256)
+message(STATUS "DataType chosen: ${ATA_TYPE}")
 
 ### Build
-
 add_library(naive0 SHARED distance-measure/baseline_distance.cpp distance-measure/baseline_distance.hpp distance-measure/distance_measure.hpp)
 add_library(naive2 SHARED distance-measure/baseline_distance.cpp distance-measure/baseline_distance.hpp distance-measure/distance_measure.hpp)
 add_library(naive3 SHARED distance-measure/baseline_distance.cpp distance-measure/baseline_distance.hpp distance-measure/distance_measure.hpp)
@@ -65,31 +65,31 @@ set_property(TARGET ed256 PROPERTY COMPILE_FLAGS ${CXXFLAGS_AVX2})
 ### INTEGRATION ###
 ###################
 
-# Create the Distance_C_Adapter.so artifact
-add_library(Distance_C_Adapter SHARED adapter/c/Distance_C_Adapter.cpp)
+# Create the DistanceMeasureFactory.so artifact
+add_library(DistanceMeasureFactory SHARED adapter/cpp/DistanceMeasureFactory.cpp adapter/cpp/DistanceMeasureFactory.hpp)
 
-# Link the two libraries, so they can be used later,
-# also, needs to be aplicable for all the implementations, not just one of them.
-target_link_libraries(Distance_C_Adapter naive0)
+if ("${ATA_TYPE}" MATCHES "auto")
+    set_property(TARGET DistanceMeasureFactory PROPERTY VARIABLE "_0")
+    target_link_libraries(DistanceMeasureFactory naive3)
+elseif ("${ATA_TYPE}" MATCHES "128")
+    set_property(TARGET DistanceMeasureFactory PROPERTY VARIABLE "_128")
+    target_link_libraries(DistanceMeasureFactory ed128)
+elseif ("${ATA_TYPE}" MATCHES "256")
+    set_property(TARGET DistanceMeasureFactory PROPERTY VARIABLE "_256")
+    target_link_libraries(DistanceMeasureFactory ed256)
+else()
+    message (FATAL_ERROR "DataType '${ATA_TYPE}' not recognized")
+endif()
 
-# Create the C_Distance.so artifact
-add_library(C_Distance SHARED adapter/c/C_Distance.c)
-
-# Link the C_Distance lib with the Distance_C_Adapter lib
-target_link_libraries(C_Distance Distance_C_Adapter)
-
+# Create the DistanceMeasure.so artifact
+add_library(PyDistance SHARED adapter/cpp/DistanceMeasureAdapter.cpp)
 
 # Set the Python version to default in the OS
 find_package(PythonLibs REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIRS})
 
-add_library(DistancePy SHARED adapter/python/EuclideanDistanceAdapter.c)
-add_library(MathCustom SHARED adapter/cpp/MathCustom.cpp)
-add_library(DistanceMeasure SHARED adapter/cpp/DistanceMeasureAdapter.cpp)
-
-target_link_libraries(DistancePy C_Distance ${PYTHON_LIBRARIES})
-target_link_libraries(MathCustom ${PYTHON_LIBRARIES})
-target_link_libraries(DistanceMeasure naive0 ${PYTHON_LIBRARIES})
+# Link the DistanceMeasure lib with the DistanceMeasureFactory lib
+target_link_libraries(PyDistance DistanceMeasureFactory ${PYTHON_LIBRARIES})
 
 ###################
 ###################
