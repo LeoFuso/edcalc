@@ -29,6 +29,10 @@ build/
 *.o
 *.so
 
+python/.idea
+python/venv
+python/*.so
+
 # Mongo Explorer plugin:
 .idea/**/mongoSettings.xml
 
