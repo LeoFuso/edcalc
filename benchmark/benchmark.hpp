@@ -24,7 +24,10 @@ public:
 	Benchmark(unsigned long, unsigned long);
 
 	void
-	perform(DistanceMeasure *);
+	euclidean(DistanceMeasure *);
+
+	void
+	manhattan(DistanceMeasure *);
 };
 
 #endif //BENCHMARK_HPP

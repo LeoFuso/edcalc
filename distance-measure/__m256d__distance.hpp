@@ -9,9 +9,11 @@ class __m256d__Distance : public DistanceMeasure
 public:
 	double
 	euclidean(const double *, const double *, unsigned long) override;
+	double
+	manhattan(const double *p, const double *q, unsigned long n) override;
 private:
-	static double
-	remaining(const double *, const double *, unsigned long);
+	inline __m256d
+	_mm256_abs_pd(__m256d a);
 };
 
 #endif //__m256D__DISTANCE_HPP
