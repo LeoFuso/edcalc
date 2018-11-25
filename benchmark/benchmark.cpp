@@ -12,7 +12,7 @@ Benchmark::Benchmark(unsigned long size, unsigned long n_tests)
 }
 
 void
-Benchmark::perform(DistanceMeasure * distance)
+Benchmark::euclidean(DistanceMeasure * distance)
 {
 	StopWatch sw;
 
@@ -32,6 +32,32 @@ Benchmark::perform(DistanceMeasure * distance)
 	time = sw.ElapsedUs();
 
 	result = distance->euclidean(x, y, n);
+
+	print_results(distance, time, result);
+}
+
+
+void
+Benchmark::manhattan(DistanceMeasure * distance)
+{
+	StopWatch sw;
+
+	double *x = Benchmark::x;
+	double *y = Benchmark::y;
+	unsigned long n = Benchmark::size;
+
+	double time = 0.0;
+	double result = 0.0;
+	unsigned long do_tests = Benchmark::n_tests;
+
+	sw.Restart();
+	while (do_tests--)
+	{
+		distance->manhattan(x, y, n);
+	}
+	time = sw.ElapsedUs();
+
+	result = distance->manhattan(x, y, n);
 
 	print_results(distance, time, result);
 }

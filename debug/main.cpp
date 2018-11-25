@@ -11,7 +11,8 @@ main()
 	unsigned long num_tests = 100000;
 
 	Benchmark benchmark(array_size, num_tests);
-	benchmark.perform(d_measure);
+	benchmark.euclidean(d_measure);
+	benchmark.manhattan(d_measure);
 
 	return 0;
 }
