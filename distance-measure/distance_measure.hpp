@@ -19,6 +19,9 @@ public:
 	virtual double
 	manhattan(const double *p, const double *q, unsigned long n) = 0;
 
+	virtual double
+	cosine(const double *p, const double *q, unsigned long n) = 0;
+
 	/*
      * Returns the runtime name the object's class
      */

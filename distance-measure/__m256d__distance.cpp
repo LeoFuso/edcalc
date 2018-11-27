@@ -111,12 +111,12 @@ __m256d__Distance::manhattan(const double *p, const double *q, unsigned long n)
 __m256d
 __m256d__Distance::_mm256_abs_pd(__m256d a)
 {
-	__m128d slice = _mm256_extractf128_pd(a, 0);
-	__m128d slice2 = _mm256_extractf128_pd(a, 1);
+	static const __m256d sign_mask = _mm256_set1_pd(-0.);
+	return _mm256_andnot_pd(sign_mask, a);
+}
 
-	slice = _mm_castsi128_pd(_mm_srli_epi64(_mm_slli_epi64(_mm_castpd_si128(slice), 1), 1));
-	slice2 = _mm_castsi128_pd(_mm_srli_epi64(_mm_slli_epi64(_mm_castpd_si128(slice2), 1), 1));
-
-	__m256d abs = _mm256_castpd128_pd256(slice);
-	return _mm256_insertf128_pd(abs,slice2, 1);
+double
+__m256d__Distance::cosine(const double *p, const double *q, unsigned long n)
+{
+	return 0;
 }

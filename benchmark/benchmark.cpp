@@ -5,14 +5,14 @@ Benchmark::Benchmark(unsigned long size, unsigned long n_tests)
 
 	Benchmark::size = size;
 	Benchmark::n_tests = n_tests;
-	Benchmark::x = (double *) aligned_alloc(32, Benchmark::size*sizeof(double));
-	Benchmark::y = (double *) aligned_alloc(32, Benchmark::size*sizeof(double));
+	Benchmark::x = (double *) aligned_alloc(32, Benchmark::size * sizeof(double));
+	Benchmark::y = (double *) aligned_alloc(32, Benchmark::size * sizeof(double));
 
 	fill_vector(Benchmark::x, Benchmark::y, Benchmark::size);
 }
 
 void
-Benchmark::euclidean(DistanceMeasure * distance)
+Benchmark::euclidean(DistanceMeasure *distance)
 {
 	StopWatch sw;
 
@@ -33,12 +33,13 @@ Benchmark::euclidean(DistanceMeasure * distance)
 
 	result = distance->euclidean(x, y, n);
 
+	std::cout << "\n" << std::endl;
+	std::cout << "      METHOD:   EUCLIDEAN" << std::endl;
 	print_results(distance, time, result);
 }
 
-
 void
-Benchmark::manhattan(DistanceMeasure * distance)
+Benchmark::manhattan(DistanceMeasure *distance)
 {
 	StopWatch sw;
 
@@ -59,6 +60,35 @@ Benchmark::manhattan(DistanceMeasure * distance)
 
 	result = distance->manhattan(x, y, n);
 
+	std::cout << "\n" << std::endl;
+	std::cout << "      METHOD:   MANHATTAN" << std::endl;
+	print_results(distance, time, result);
+}
+
+void
+Benchmark::cosine(DistanceMeasure *distance)
+{
+	StopWatch sw;
+
+	double *x = Benchmark::x;
+	double *y = Benchmark::y;
+	unsigned long n = Benchmark::size;
+
+	double time = 0.0;
+	double result = 0.0;
+	unsigned long do_tests = Benchmark::n_tests;
+
+	sw.Restart();
+	while (do_tests--)
+	{
+		distance->cosine(x, y, n);
+	}
+	time = sw.ElapsedUs();
+
+	result = distance->cosine(x, y, n);
+
+	std::cout << "\n" << std::endl;
+	std::cout << "      METHOD:   COSINE" << std::endl;
 	print_results(distance, time, result);
 }
 
@@ -76,13 +106,11 @@ Benchmark::fill_vector(double *x, double *y, unsigned long n)
 }
 
 void
-Benchmark::print_results(DistanceMeasure * distance, double time, double result)
+Benchmark::print_results(DistanceMeasure *distance, double time, double result)
 {
-
-	std::cout << "\n" << std::endl;
 	std::cout << " USING CLASS:   " << distance->getClassName() << std::endl;
 	std::cout.precision(12);
-	std::cout << "ELAPSED TIME:   " << time/1000000 << "s" << std::endl;
+	std::cout << "ELAPSED TIME:   " << time / 1000000 << "s" << std::endl;
 	std::cout.precision(12);
 	std::cout << "      RESULT:   " << result << "\n" << std::endl;
 	std::cout << "\n" << std::endl;
