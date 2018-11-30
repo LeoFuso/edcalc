@@ -14,7 +14,7 @@ class_name()
 {
     auto *factory = new DistanceMeasureFactory();
     auto *d_measure = factory->produce();
-    return d_measure->getClassName();
+    return d_measure->getClassSimpleName();
 }
 
 PyObject *
