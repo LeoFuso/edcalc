@@ -22,12 +22,12 @@ private:
 
 public:
 	Benchmark(unsigned long, unsigned long);
-
 	void
 	euclidean(DistanceMeasure *);
-
 	void
 	manhattan(DistanceMeasure *);
+	void
+	cosine(DistanceMeasure *);
 };
 
 #endif //BENCHMARK_HPP
