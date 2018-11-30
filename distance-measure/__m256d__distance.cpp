@@ -84,38 +84,25 @@ __m256d__Distance::cosine(const double *p, const double *q, unsigned long n)
 		q += 4;
 	}
 
-	/*
-	if (n)
-	{
-		const __m128d empty = _mm256_setzero_pd();
-
-		const double a_local = p[0] * q[0];
-		const __m128d top_leftover = _mm_loadl_pd(empty, &a_local);
-
-		const double b_local = p[0] * p[0];
-		const __m128d left_leftover = _mm_loadl_pd(empty, &b_local);
-
-		const double c_local = q[0] * q[0];
-		const __m128d right_leftover = _mm_loadl_pd(empty, &c_local);
-
-		top = _mm_add_pd(top, top_leftover);
-		left = _mm_add_pd(left, left_leftover);
-		right = _mm_add_pd(right, right_leftover);
-	}
+	const __m128d empty = _mm_setzero_pd();
+	double double_left = __m256d__Distance::_mm256_group_pd(left);
+	double double_right = __m256d__Distance::_mm256_group_pd(right);
 
 	if (n)
 	{
 		for (int i = 0; i < n; ++i)
 		{
-			const double num = fabs(p[i] - q[i]);
-			result += num;
+			const double a_local = p[i] * q[i];
+			const __m128d top_leftover = _mm_loadl_pd(empty, &a_local);
+			const __m256d top_leftover_256 = _mm256_castpd128_pd256(top_leftover);
+			top = _mm256_add_pd(top, top_leftover_256);
+
+			const double b_local = p[i] * p[i];
+			double_left+= b_local;
+			const double c_local = q[i] * q[i];
+			double_right+= c_local;
 		}
 	}
-	*/
-
-	const __m128d empty = _mm_setzero_pd();
-	const double double_left = __m256d__Distance::_mm256_group_pd(left);
-	const double double_right = __m256d__Distance::_mm256_group_pd(right);
 
 	__m128d load_pd = _mm_loadl_pd(empty, &double_left);
 	load_pd = _mm_loadh_pd(load_pd, &double_right);
