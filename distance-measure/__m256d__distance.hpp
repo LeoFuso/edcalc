@@ -16,6 +16,8 @@ public:
 private:
 	inline __m256d
 	_mm256_abs_pd(__m256d a);
+	inline double
+	_mm256_group_pd(__m256d a);
 };
 
 #endif //__m256D__DISTANCE_HPP

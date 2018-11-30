@@ -1,3 +1,4 @@
+#include <iostream>
 #include "baseline_distance.hpp"
 
 double

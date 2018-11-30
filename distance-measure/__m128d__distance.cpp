@@ -17,27 +17,7 @@ __m128d__Distance::euclidean(const double *p, const double *q, unsigned long n)
 		q += 2;
 	}
 
-	/*
-	 *   in ->  {p, q}
-	 *  out ->  {q, p}
-	 */
-	const __m128d shuffle =
-		_mm_shuffle_pd(euclidean, euclidean, 1);
-
-	/*
-	 *   in -> {  x  ,  y  }
-	 *   in -> {  a  ,  b  }
-	 *  out -> { x+a , y+b }
-	 */
-	const __m128d sum =
-		_mm_add_pd(euclidean, shuffle);
-
-	/*
-	 *   in ->  {x, y}
-	 *  out ->  {x}
-	 */
-	result = _mm_cvtsd_f64(sum);
-
+	result = __m128d__Distance::_mm_group_pd(euclidean);
 
 	/* if n is odd */
 	if (n)
@@ -66,13 +46,7 @@ __m128d__Distance::manhattan(const double *p, const double *q, unsigned long n)
 		q += 2;
 	}
 
-	const __m128d shuffle =
-		_mm_shuffle_pd(manhattan, manhattan, 1);
-
-	const __m128d sum =
-		_mm_add_pd(manhattan, shuffle);
-
-	result = _mm_cvtsd_f64(sum);
+	result = __m128d__Distance::_mm_group_pd(manhattan);
 
 	if (n)
 	{
@@ -81,13 +55,6 @@ __m128d__Distance::manhattan(const double *p, const double *q, unsigned long n)
 	}
 
 	return result;
-}
-
-__m128d
-__m128d__Distance::_mm_abs_pd(__m128d a)
-{
-	static const __m128d sign_mask = _mm_set1_pd(-0.);
-	return _mm_andnot_pd(sign_mask, a);
 }
 
 double
@@ -112,28 +79,63 @@ __m128d__Distance::cosine(const double *p, const double *q, unsigned long n)
 		q += 2;
 	}
 
-	const __m128d sqrt_left = _mm_sqrt_pd(left);
-	const __m128d sqrt_right = _mm_sqrt_pd(right);
+	if (n)
+	{
+		const __m128d empty = _mm_setzero_pd();
 
-	const __m128d bottom = _mm_mul_pd(left, right);
+		const double a_local = p[0] * q[0];
+		const __m128d top_leftover = _mm_loadl_pd(empty, &a_local);
 
-	/* top / bottom */
+		const double b_local = p[0] * p[0];
+		const __m128d left_leftover = _mm_loadl_pd(empty, &b_local);
+
+		const double c_local = q[0] * q[0];
+		const __m128d right_leftover = _mm_loadl_pd(empty, &c_local);
+
+		top = _mm_add_pd(top, top_leftover);
+		left = _mm_add_pd(left, left_leftover);
+		right = _mm_add_pd(right, right_leftover);
+	}
+
+	const __m128d shuffle_left = _mm_shuffle_pd(left, left, 1);
+	const __m128d shuffle_right = _mm_shuffle_pd(right, right, 1);
+	const __m128d sum_left = _mm_add_pd(left, shuffle_left);
+	const __m128d sum_right = _mm_add_pd(right, shuffle_right);
+	const __m128d sqrt_shuffle = _mm_shuffle_pd(sum_left, sum_right, 1);
+	const __m128d sqrt_left_right = _mm_sqrt_pd(sqrt_shuffle);
+	const __m128d sqrt_right_left = _mm_shuffle_pd(sqrt_left_right, sqrt_left_right, 1);
+	const __m128d bottom = _mm_mul_pd(sqrt_left_right, sqrt_right_left);
+
 	const __m128d cosine = _mm_div_pd(top, bottom);
 
-	const __m128d shuffle = _mm_shuffle_pd(cosine, cosine, 1);
-
-	const __m128d sum = _mm_add_pd(cosine, shuffle);
-
-	return _mm_cvtsd_f64(sum);
+	return __m128d__Distance::_mm_group_pd(cosine);
 }
 
 __m128d
-__m128d__Distance::_mm_rcp_pd(__m128d a)
+__m128d__Distance::_mm_abs_pd(__m128d a)
 {
-
-	const double left = _mm_cvtsd_f64(a);
-	const __m128d shuffle = _mm_shuffle_pd(a, a, 1);
-	const double right = _mm_cvtsd_f64(a);
-	return a;
+	static const __m128d sign_mask = _mm_set1_pd(-0.);
+	return _mm_andnot_pd(sign_mask, a);
 }
+double
+__m128d__Distance::_mm_group_pd(__m128d a)
+{
+	/*
+	 *   in ->  {p, q}
+	 *  out ->  {q, p}
+	 */
+	const __m128d shuffle = _mm_shuffle_pd(a, a, 1);
 
+	/*
+	 *   in -> {  x  ,  y  }
+	 *   in -> {  a  ,  b  }
+	 *  out -> { x+a , y+b }
+	 */
+	const __m128d sum = _mm_add_pd(a, shuffle);
+
+	/*
+	 *   in ->  {x, y}
+	 *  out ->  {x}
+	 */
+	return _mm_cvtsd_f64(sum);
+}
