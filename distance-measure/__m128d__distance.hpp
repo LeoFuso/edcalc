@@ -17,6 +17,6 @@ private:
 	inline __m128d
 	_mm_abs_pd(__m128d a);
 	inline double
-	_mm_group_pd(__m128d a);
+	_mm_rdcsd_f64(__m128d a);
 };
 #endif //__m128D__DISTANCE_HPP

@@ -8,7 +8,6 @@
 class DistanceMeasure
 {
 public:
-
 	DistanceMeasure() = default;
 
 	virtual ~DistanceMeasure() = default;
@@ -22,11 +21,8 @@ public:
 	virtual double
 	cosine(const double *p, const double *q, unsigned long n) = 0;
 
-	/*
-     * Returns the runtime name the object's class
-     */
 	const char *
-	getClassName()
+	getClassSimpleName()
 	{
 		const char *dirt_name = nullptr;
 		dirt_name = typeid(*this).name();

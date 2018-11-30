@@ -17,8 +17,7 @@ __m256d__Distance::euclidean(const double *p, const double *q, unsigned long n)
 		q += 4;
 	}
 
-	result = __m256d__Distance::_mm256_group_pd(euclidean);
-
+	result = __m256d__Distance::_mm256_rdcsd_f64(euclidean);
 	if (n)
 	{
 		for (int i = 0; i < n; ++i)
@@ -27,7 +26,6 @@ __m256d__Distance::euclidean(const double *p, const double *q, unsigned long n)
 			result += num * num;
 		}
 	}
-
 	return sqrt(result);
 }
 
@@ -48,8 +46,7 @@ __m256d__Distance::manhattan(const double *p, const double *q, unsigned long n)
 		q += 4;
 	}
 
-	result = __m256d__Distance::_mm256_group_pd(manhattan);
-
+	result = __m256d__Distance::_mm256_rdcsd_f64(manhattan);
 	if (n)
 	{
 		for (int i = 0; i < n; ++i)
@@ -58,7 +55,6 @@ __m256d__Distance::manhattan(const double *p, const double *q, unsigned long n)
 			result += num;
 		}
 	}
-
 	return result;
 }
 
@@ -85,29 +81,28 @@ __m256d__Distance::cosine(const double *p, const double *q, unsigned long n)
 	}
 
 	const __m128d empty = _mm_setzero_pd();
-	double double_left = __m256d__Distance::_mm256_group_pd(left);
-	double double_right = __m256d__Distance::_mm256_group_pd(right);
+	double double_left = __m256d__Distance::_mm256_rdcsd_f64(left);
+	double double_right = __m256d__Distance::_mm256_rdcsd_f64(right);
 
 	if (n)
 	{
 		for (int i = 0; i < n; ++i)
 		{
-			const double a_local = p[i] * q[i];
-			const __m128d top_leftover = _mm_loadl_pd(empty, &a_local);
+			const double a = p[i] * q[i];
+			const __m128d top_leftover = _mm_loadl_pd(empty, &a);
 			const __m256d top_leftover_256 = _mm256_castpd128_pd256(top_leftover);
 			top = _mm256_add_pd(top, top_leftover_256);
 
-			const double b_local = p[i] * p[i];
-			double_left+= b_local;
-			const double c_local = q[i] * q[i];
-			double_right+= c_local;
+			const double b = p[i] * p[i];
+			double_left+= b;
+			const double c = q[i] * q[i];
+			double_right+= c;
 		}
 	}
 
 	__m128d load_pd = _mm_loadl_pd(empty, &double_left);
 	load_pd = _mm_loadh_pd(load_pd, &double_right);
 	const __m128d sqrt_left_right = _mm_sqrt_pd(load_pd);
-
 
 	const __m128d sqrt_right_left = _mm_shuffle_pd(sqrt_left_right, sqrt_left_right, 1);
 	const __m128d bottom = _mm_mul_pd(sqrt_left_right, sqrt_right_left);
@@ -119,10 +114,7 @@ __m256d__Distance::cosine(const double *p, const double *q, unsigned long n)
 	const __m128d top_128_l = _mm256_extractf128_pd(permute_lane, 1);
 	const __m128d top_128 = _mm_shuffle_pd(top_128_h, top_128_l, 1);
 
-
 	const __m128d cosine = _mm_div_pd(top_128, bottom);
-
-
 	const __m128d shuffle = _mm_shuffle_pd(cosine, cosine, 1);
 	const __m128d sum = _mm_add_pd(cosine, shuffle);
 	return _mm_cvtsd_f64(sum);
@@ -136,10 +128,10 @@ __m256d__Distance::_mm256_abs_pd(__m256d a)
 }
 
 double
-__m256d__Distance::_mm256_group_pd(__m256d a)
+__m256d__Distance::_mm256_rdcsd_f64(__m256d a)
 {
-	__m256d sum_128 = _mm256_hadd_pd(a, a);
-	__m256d permute_lane = _mm256_permute2f128_pd(sum_128, sum_128, 1);
-	__m256d sum = _mm256_add_pd(sum_128, permute_lane);
-	return _mm256_cvtsd_f64(sum);
+	__m256d sum_lane = _mm256_hadd_pd(a, a);
+	__m256d permute_lane = _mm256_permute2f128_pd(sum_lane, sum_lane, 1);
+	__m256d accumulator = _mm256_add_pd(sum_lane, permute_lane);
+	return _mm256_cvtsd_f64(accumulator);
 }

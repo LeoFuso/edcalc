@@ -1,4 +1,3 @@
-#include <iostream>
 #include "baseline_distance.hpp"
 
 double
@@ -28,21 +27,18 @@ BaselineDistance::manhattan(const double *p, const double *q, unsigned long n)
 double
 BaselineDistance::cosine(const double *p, const double *q, unsigned long n)
 {
-	double a = 0;
-	double b = 0;
-	double c = 0;
-
+	double top = 0;
+	double left = 0;
+	double right = 0;
 	for (int i = 0; i < n; ++i)
 	{
-		const double a_local = p[i] * q[i];
-		a += a_local;
-		const double b_local = p[i] * p[i];
-		b+= b_local;
-		const double c_local = q[i] * q[i];
-		c+= c_local;
+		const double a = p[i] * q[i];
+		top += a;
+		const double b = p[i] * p[i];
+		left += b;
+		const double c = q[i] * q[i];
+		right += c;
 	}
-	const double top = a;
-	const double bottom = sqrt(b) * sqrt(c);
-
+	const double bottom = sqrt(left) * sqrt(right);
 	return top / bottom;
 }
