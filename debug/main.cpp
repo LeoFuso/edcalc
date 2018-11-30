@@ -10,8 +10,8 @@ main()
 	auto * double128 = new __m128d__Distance;
 	auto * double256 = new __m256d__Distance;
 
-	unsigned long array_size = 2;
-	unsigned long num_tests = 1;
+	unsigned long array_size = 11797;
+	unsigned long num_tests = 100000;
 
 	Benchmark benchmark(array_size, num_tests);
 

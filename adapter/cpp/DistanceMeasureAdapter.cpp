@@ -4,9 +4,23 @@
 double
 euclidean(const double *x, const double *y, unsigned long n)
 {
-	auto *factory = new DistanceMeasureFactory();
-	auto *d_measure = factory->produce();
-	return d_measure->euclidean(x, y, n);
+    auto *factory = new DistanceMeasureFactory();
+    auto *d_measure = factory->produce();
+    return d_measure->euclidean(x, y, n);
+}
+
+const char *
+class_name()
+{
+    auto *factory = new DistanceMeasureFactory();
+    auto *d_measure = factory->produce();
+    return d_measure->getClassSimpleName();
+}
+
+PyObject *
+_class_name(PyObject *module)
+{
+    return PyUnicode_FromString(class_name());
 }
 
 PyObject *
