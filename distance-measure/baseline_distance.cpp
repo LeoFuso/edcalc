@@ -23,3 +23,22 @@ BaselineDistance::manhattan(const double *p, const double *q, unsigned long n)
     }
     return result;
 }
+
+double
+BaselineDistance::cosine(const double *p, const double *q, unsigned long n)
+{
+    double top = 0;
+    double left = 0;
+    double right = 0;
+    for (int i = 0; i < n; ++i)
+    {
+        const double a = p[i] * q[i];
+        top += a;
+        const double b = p[i] * p[i];
+        left += b;
+        const double c = q[i] * q[i];
+        right += c;
+    }
+    const double bottom = sqrt(left) * sqrt(right);
+    return top / bottom;
+}
