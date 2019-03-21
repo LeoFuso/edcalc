@@ -60,7 +60,7 @@ class Benchmark:
         time = end - start
 
         res = pd.manhattan(self.x, self.y)
-        print("USING METHOD:    MANHATTAN")
+        print("\nUSING METHOD:    MANHATTAN")
         print("USING CLASS:    " + pd.getClassName())
         self.print_results(time, res)
 

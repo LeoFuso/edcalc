@@ -137,7 +137,7 @@ manhattan(PyObject *self, PyObject *args)
 	Py_DECREF(x_sequence);
 	Py_DECREF(y_sequence);
 
-	result = manhattan(x, y, x_sequence_length);
+	result = manhattan (x, y, x_sequence_length);
 
 	free(x);
 	free(y);
@@ -190,7 +190,7 @@ cosine(PyObject *self, PyObject *args)
 	Py_DECREF(x_sequence);
 	Py_DECREF(y_sequence);
 
-	result = cosine(x, y, x_sequence_length);
+	result = cosine (x, y, x_sequence_length);
 
 	free(x);
 	free(y);
