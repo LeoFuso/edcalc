@@ -12,7 +12,7 @@ message(STATUS "${PyDistance_NAME}")
 
 set(PyDistance_VERSION_MAJOR "1")
 set(PyDistance_VERSION_MINOR "1")
-set(PyDistance_VERSION_PATCH "1")
+set(PyDistance_VERSION_PATCH "2")
 
 set(PyDistance_VERSION "${PyDistance_VERSION_MAJOR}.")
 set(PyDistance_VERSION "${PyDistance_VERSION}${PyDistance_VERSION_MINOR}.")
