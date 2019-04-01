@@ -12,8 +12,8 @@ main()
 
 	Benchmark benchmark(array_size, num_tests);
 	benchmark.euclidean(d_measure);
-	benchmark.manhattan(d_measure);
-	benchmark.cosine(d_measure);
+	// benchmark.manhattan(d_measure);
+	// benchmark.cosine(d_measure);
 
 	return 0;
 }
