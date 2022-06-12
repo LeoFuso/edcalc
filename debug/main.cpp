@@ -1,23 +1,23 @@
 #include "../benchmark/benchmark.hpp"
-#include "../euclidean_distance/ed_baseline.hpp"
-#include "../euclidean_distance/ed_128d.hpp"
-#include "../euclidean_distance/ed_256d.hpp"
+#include "../adapter/cpp/DistanceMeasureFactory.hpp"
 
 int
 main()
 {
-	auto * baseline = new Baseline;
-	auto * double128 = new Double128;
-	auto * double256 = new Double256;
+    auto* factory = new DistanceMeasureFactory();
+    DistanceMeasure* d_measure = factory->produce();
 
-	unsigned long array_size = 1000000;
-	unsigned long num_tests = 100;
+    delete factory;
 
-	Benchmark benchmark(array_size, num_tests);
+    unsigned long array_size = 11797;
+    unsigned long num_tests = 100000;
 
-	benchmark.perform(baseline);
-	benchmark.perform(double128);
-	benchmark.perform(double256);
+    Benchmark benchmark(array_size, num_tests);
+    benchmark.euclidean(d_measure);
+    benchmark.manhattan(d_measure);
+    benchmark.cosine(d_measure);
 
-	return 0;
+    delete d_measure;
+
+    return 0;
 }
