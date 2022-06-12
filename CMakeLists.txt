@@ -1,23 +1,23 @@
 cmake_minimum_required(VERSION 3.8)
 #set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_BUILD_TYPE Debug)
-project(PyDistance)
+project(VectorDistance)
 
 # For development, only,
 # Comment the next line after the project is working properly
 # set(CMAKE_VERBOSE_MAKEFILE on)
 
-set(PyDistance_NAME "PyDistance Library")
-message(STATUS "${PyDistance_NAME}")
+set(VectorDistance_NAME "VectorDistance Library")
+message(STATUS "${VectorDistance_NAME}")
 
-set(PyDistance_VERSION_MAJOR "1")
-set(PyDistance_VERSION_MINOR "1")
-set(PyDistance_VERSION_PATCH "2")
+set(VectorDistance_VERSION_MAJOR "1")
+set(VectorDistance_VERSION_MINOR "1")
+set(VectorDistance_VERSION_PATCH "2")
 
-set(PyDistance_VERSION "${PyDistance_VERSION_MAJOR}.")
-set(PyDistance_VERSION "${PyDistance_VERSION}${PyDistance_VERSION_MINOR}.")
-set(PyDistance_VERSION "${PyDistance_VERSION}${PyDistance_VERSION_PATCH}")
-message(STATUS "version: ${PyDistance_VERSION}")
+set(VectorDistance_VERSION "${VectorDistance_VERSION_MAJOR}.")
+set(VectorDistance_VERSION "${VectorDistance_VERSION}${VectorDistance_VERSION_MINOR}.")
+set(VectorDistance_VERSION "${VectorDistance_VERSION}${VectorDistance_VERSION_PATCH}")
+message(STATUS "version: ${VectorDistance_VERSION}")
 
 # Set the reference standard of the C++ Language
 set(CMAKE_CXX_STANDARD 11)
@@ -43,16 +43,16 @@ set(CMAKE_BINARY_DIR ${PROJECT_BINARY_DIR}/bin)
 # Set the output directory for the executables
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
-# Option to choose DataType usage
-set(ATA_TYPE "auto" CACHE STRING "DataType chosen")
-set_property(CACHE ATA_TYPE PROPERTY STRINGS auto 128 256)
-message(STATUS "DataType chosen: ${ATA_TYPE}")
+# Option to choose Vector size usage
+set(VECTOR_SIZE "auto" CACHE STRING "Vector size chosen")
+set_property(CACHE VECTOR_SIZE PROPERTY STRINGS auto 128 256)
+message(STATUS "Vector size chosen: ${VECTOR_SIZE}")
 
 ### Build
 # Create the DistanceMeasureFactory.so artifact
 add_library(DistanceMeasureFactory SHARED adapter/cpp/DistanceMeasureFactory.cpp adapter/cpp/DistanceMeasureFactory.hpp)
 
-if ("${ATA_TYPE}" MATCHES "auto")
+if ("${VECTOR_SIZE}" MATCHES "auto")
 
     add_library(distance SHARED distance-measure/baseline_distance.cpp distance-measure/baseline_distance.hpp distance-measure/distance_measure.hpp)
     set_property(TARGET distance PROPERTY COMPILE_FLAGS ${CXXFLAGS_SSE2})
@@ -60,7 +60,15 @@ if ("${ATA_TYPE}" MATCHES "auto")
     target_compile_definitions(DistanceMeasureFactory PRIVATE _0)
     target_link_libraries(DistanceMeasureFactory distance)
 
-elseif ("${ATA_TYPE}" MATCHES "128")
+elseif ("${VECTOR_SIZE}" MATCHES "auto-no-opt")
+
+    add_library(distance SHARED distance-measure/baseline_distance.cpp distance-measure/baseline_distance.hpp distance-measure/distance_measure.hpp)
+    set_property(TARGET distance PROPERTY COMPILE_FLAGS ${CXXFLAGS_O0})
+
+    target_compile_definitions(DistanceMeasureFactory PRIVATE _0)
+    target_link_libraries(DistanceMeasureFactory distance)
+
+elseif ("${VECTOR_SIZE}" MATCHES "128")
 
     add_library(distance SHARED distance-measure/__m128d__distance.cpp distance-measure/__m128d__distance.hpp distance-measure/distance_measure.hpp)
     set_property(TARGET distance PROPERTY COMPILE_FLAGS ${CXXFLAGS_SSE2})
@@ -68,7 +76,7 @@ elseif ("${ATA_TYPE}" MATCHES "128")
     target_compile_definitions(DistanceMeasureFactory PRIVATE _128)
     target_link_libraries(DistanceMeasureFactory distance)
 
-elseif ("${ATA_TYPE}" MATCHES "256")
+elseif ("${VECTOR_SIZE}" MATCHES "256")
 
     add_library(distance SHARED distance-measure/__m256d__distance.cpp distance-measure/__m256d__distance.hpp distance-measure/distance_measure.hpp)
     set_property(TARGET distance PROPERTY COMPILE_FLAGS ${CXXFLAGS_AVX2})
@@ -78,7 +86,7 @@ elseif ("${ATA_TYPE}" MATCHES "256")
 
 else()
 
-    message (FATAL_ERROR "DataType '${ATA_TYPE}' not recognized")
+    message (FATAL_ERROR "Vector size '${VECTOR_SIZE}' not recognized")
 
 endif()
 
@@ -87,15 +95,8 @@ endif()
 ### INTEGRATION ###
 ###################
 
-# Create the DistanceMeasure.so artifact
-add_library(PyDistance SHARED adapter/cpp/DistanceMeasureAdapter.cpp)
-
-# Set the Python version to default in the OS
-find_package(PythonLibs REQUIRED)
-include_directories(${PYTHON_INCLUDE_DIRS})
-
-# Link the DistanceMeasure lib with the DistanceMeasureFactory lib
-target_link_libraries(PyDistance DistanceMeasureFactory ${PYTHON_LIBRARIES})
+# Create the VectorDistanceMeasureAdapter.so artifact - deprecated
+add_library(VectorDistanceAdapter SHARED adapter/cpp/DistanceMeasureAdapter.cpp)
 
 ###################
 ### DEBUG #########
@@ -105,10 +106,6 @@ add_library(benchmark SHARED benchmark/benchmark.cpp benchmark/benchmark.hpp ben
 
 add_executable(main debug/main.cpp)
 target_link_libraries(main benchmark DistanceMeasureFactory)
-
-# main.py
-# Copy the Python's main file to the library directory
-file(COPY debug/main.py DESTINATION ${PROJECT_BINARY_DIR}/lib)
 
 ###################
 ###################

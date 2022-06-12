@@ -4,16 +4,20 @@
 int
 main()
 {
-	auto *factory = new DistanceMeasureFactory();
-	auto *d_measure = factory->produce();
+    auto* factory = new DistanceMeasureFactory();
+    DistanceMeasure* d_measure = factory->produce();
 
-	unsigned long array_size = 11797;
-	unsigned long num_tests = 100000;
+    delete factory;
 
-	Benchmark benchmark(array_size, num_tests);
-	benchmark.euclidean(d_measure);
-	// benchmark.manhattan(d_measure);
-	// benchmark.cosine(d_measure);
+    unsigned long array_size = 11797;
+    unsigned long num_tests = 100000;
 
-	return 0;
+    Benchmark benchmark(array_size, num_tests);
+    benchmark.euclidean(d_measure);
+    benchmark.manhattan(d_measure);
+    benchmark.cosine(d_measure);
+
+    delete d_measure;
+
+    return 0;
 }
