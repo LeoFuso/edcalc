@@ -1,25 +1,32 @@
-### C++ / Python Integration
-### PyDistance
+### C++ Vector Distance Study
+### VectorDistance
+
+I've built this lib to benchmark different distance measures operations using different vector implementations.
+
+So far you can build this lib using:
+* a baseline strategy;
+* a baseline strategy with no compiler optimizations;
+* Vectors of 128 bits (**SSE2**)
+* Vectors of 256 bits (**AVX2**)
+
+There's a simple benchmark that can be run after the **make** execution:
+```
+$ ./build/bin/main
+```
 
 ## Build process
 
 ``` bash
 $ mkdir build
 $ cd build
-$ cmake -DATA_TYPE={{DATA_TYPE}} ..
+$ cmake -DVECTOR_SIZE={{VECTOR-SIZE}} ..
 $ make
-$ cp lib/PyDistance.so ../python/
-$ python3 ../python/main.py
 ```
 
-Where __DATA_TYPE__ can be either **auto**, **128**, **256**
+Where __VECTOR_SIZE__ can be either **auto**, **auto-no-opt**, **128**, **256**
 
-### Python 3.6^
-It appears that Python 3.6^is the recommend way of building this library.
 
-However _CMake_ only appears to found the latest _Python3.6_ version after
-installing the _python3-dev_ packages.
+_The original purpose of these libraries was to integrate with Python, to benchmark against other native solutions._
 
-```bash
-$ sudo apt install python-dev python3-dev
-```
+_I'm dropping the support in favor of Java's Project Panama._
+
