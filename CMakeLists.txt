@@ -92,11 +92,18 @@ endif()
 
 
 ###################
-### INTEGRATION ###
+###     Libs    ###
 ###################
 
-# Create the VectorDistanceMeasureAdapter.so artifact - deprecated
-add_library(VectorDistanceAdapter SHARED adapter/cpp/DistanceMeasureAdapter.cpp)
+# Create VectorDistance artifact
+add_library(VectorDistance SHARED adapter/cpp/DistanceMeasureAdapter.cpp)
+target_link_libraries(VectorDistance DistanceMeasureFactory)
+
+add_library(VectorDistanceAdapterCpp SHARED adapter/c/Distance_C_Adapter.cpp)
+target_link_libraries(VectorDistanceAdapterCpp DistanceMeasureFactory)
+
+add_library(VectorDistanceAdapterC SHARED adapter/c/C_Distance.c)
+target_link_libraries(VectorDistanceAdapterC VectorDistanceAdapterCpp)
 
 ###################
 ### DEBUG #########
@@ -107,6 +114,8 @@ add_library(benchmark SHARED benchmark/benchmark.cpp benchmark/benchmark.hpp ben
 add_executable(main debug/main.cpp)
 target_link_libraries(main benchmark DistanceMeasureFactory)
 
+add_executable(main_c debug/main.c)
+target_link_libraries(main_c VectorDistanceAdapterC)
 ###################
 ###################
 ###################
