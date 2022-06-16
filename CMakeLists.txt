@@ -1,31 +1,25 @@
 cmake_minimum_required(VERSION 3.8)
-#set(CMAKE_BUILD_TYPE Release)
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Release)
 project(VectorDistance)
 
 # For development, only,
 # Comment the next line after the project is working properly
-# set(CMAKE_VERBOSE_MAKEFILE on)
+set(CMAKE_VERBOSE_MAKEFILE on)
 
-set(VectorDistance_NAME "VectorDistance Library")
-message(STATUS "${VectorDistance_NAME}")
+set(DISTANCE_NAME "Distance Library")
+message(STATUS "${DISTANCE_NAME}")
 
-set(VectorDistance_VERSION_MAJOR "1")
-set(VectorDistance_VERSION_MINOR "1")
-set(VectorDistance_VERSION_PATCH "2")
+set(DISTANCE_VERSION_MAJOR "1")
+set(DISTANCE_VERSION_MINOR "0")
+set(DISTANCE_VERSION_PATCH "0")
 
-set(VectorDistance_VERSION "${VectorDistance_VERSION_MAJOR}.")
-set(VectorDistance_VERSION "${VectorDistance_VERSION}${VectorDistance_VERSION_MINOR}.")
-set(VectorDistance_VERSION "${VectorDistance_VERSION}${VectorDistance_VERSION_PATCH}")
-message(STATUS "version: ${VectorDistance_VERSION}")
+set(DISTANCE_VERSION "${DISTANCE_VERSION_MAJOR}.")
+set(DISTANCE_VERSION "${DISTANCE_VERSION}${DISTANCE_VERSION_MINOR}.")
+set(DISTANCE_VERSION "${DISTANCE_VERSION}${DISTANCE_VERSION_PATCH}")
+message(STATUS "version: ${DISTANCE_VERSION}")
 
 # Set the reference standard of the C++ Language
 set(CMAKE_CXX_STANDARD 11)
-
-# Remove the "lib" prefix from all library objects
-set(CMAKE_SHARED_LIBRARY_PREFIX "")
-# Set the ".so" suffix in all library objects
-set(CMAKE_SHARED_LIBRARY_SUFFIX ".so")
 
 ### Flags
 set(CXXFLAGS_O0 "-O0")
@@ -34,8 +28,9 @@ set(CXXFLAGS_SSE2 "-O3 -march=native")
 set(CXXFLAGS_AVX2 "-O3 -march=native -mavx2")
 
 ### Output
-# Set the output directory for the .so
+# Set the output directory for all Dynamic and Static Libs
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 
 # Set the output directory for the binaries
 set(CMAKE_BINARY_DIR ${PROJECT_BINARY_DIR}/bin)
@@ -49,73 +44,88 @@ set_property(CACHE VECTOR_SIZE PROPERTY STRINGS auto 128 256)
 message(STATUS "Vector size chosen: ${VECTOR_SIZE}")
 
 ### Build
-# Create the DistanceMeasureFactory.so artifact
-add_library(DistanceMeasureFactory SHARED adapter/cpp/DistanceMeasureFactory.cpp adapter/cpp/DistanceMeasureFactory.hpp)
+# Create the DistanceMeasureFactory artifact
+add_library(DistanceMeasureFactory STATIC distance-measure/distance_measure_factory.cpp distance-measure/distance_measure_factory.hpp)
+set_target_properties(DistanceMeasureFactory PROPERTIES PUBLIC_HEADER distance-measure/distance_measure_factory.hpp)
 
 if ("${VECTOR_SIZE}" MATCHES "auto")
 
-    add_library(distance SHARED distance-measure/baseline_distance.cpp distance-measure/baseline_distance.hpp distance-measure/distance_measure.hpp)
-    set_property(TARGET distance PROPERTY COMPILE_FLAGS ${CXXFLAGS_SSE2})
+    add_library(DistanceMeasure STATIC distance-measure/baseline_distance.cpp distance-measure/baseline_distance.hpp distance-measure/distance_measure.hpp)
+    set_target_properties(DistanceMeasure PROPERTIES PUBLIC_HEADER distance-measure/baseline_distance.hpp)
+    set_property(TARGET DistanceMeasure PROPERTY COMPILE_FLAGS ${CXXFLAGS_SSE2})
 
     target_compile_definitions(DistanceMeasureFactory PRIVATE _0)
-    target_link_libraries(DistanceMeasureFactory distance)
+    target_link_libraries(DistanceMeasureFactory DistanceMeasure)
 
 elseif ("${VECTOR_SIZE}" MATCHES "auto-no-opt")
 
-    add_library(distance SHARED distance-measure/baseline_distance.cpp distance-measure/baseline_distance.hpp distance-measure/distance_measure.hpp)
-    set_property(TARGET distance PROPERTY COMPILE_FLAGS ${CXXFLAGS_O0})
+    add_library(DistanceMeasure STATIC distance-measure/baseline_distance.cpp distance-measure/baseline_distance.hpp distance-measure/distance_measure.hpp)
+    set_target_properties(DistanceMeasure PROPERTIES PUBLIC_HEADER distance-measure/baseline_distance.hpp)
+    set_property(TARGET DistanceMeasure PROPERTY COMPILE_FLAGS ${CXXFLAGS_O0})
 
     target_compile_definitions(DistanceMeasureFactory PRIVATE _0)
-    target_link_libraries(DistanceMeasureFactory distance)
+    target_link_libraries(DistanceMeasureFactory DistanceMeasure)
 
 elseif ("${VECTOR_SIZE}" MATCHES "128")
 
-    add_library(distance SHARED distance-measure/__m128d__distance.cpp distance-measure/__m128d__distance.hpp distance-measure/distance_measure.hpp)
-    set_property(TARGET distance PROPERTY COMPILE_FLAGS ${CXXFLAGS_SSE2})
+    add_library(DistanceMeasure STATIC distance-measure/__m128d__distance.cpp distance-measure/__m128d__distance.hpp distance-measure/distance_measure.hpp)
+    set_target_properties(DistanceMeasure PROPERTIES PUBLIC_HEADER distance-measure/__m128d__distance.hpp)
+    set_property(TARGET DistanceMeasure PROPERTY COMPILE_FLAGS ${CXXFLAGS_SSE2})
 
     target_compile_definitions(DistanceMeasureFactory PRIVATE _128)
-    target_link_libraries(DistanceMeasureFactory distance)
+    target_link_libraries(DistanceMeasureFactory DistanceMeasure)
 
 elseif ("${VECTOR_SIZE}" MATCHES "256")
 
-    add_library(distance SHARED distance-measure/__m256d__distance.cpp distance-measure/__m256d__distance.hpp distance-measure/distance_measure.hpp)
-    set_property(TARGET distance PROPERTY COMPILE_FLAGS ${CXXFLAGS_AVX2})
+    add_library(DistanceMeasure STATIC distance-measure/__m256d__distance.cpp distance-measure/__m256d__distance.hpp distance-measure/distance_measure.hpp)
+    set_target_properties(DistanceMeasure PROPERTIES PUBLIC_HEADER distance-measure/__m256d__distance.hpp)
+    set_property(TARGET DistanceMeasure PROPERTY COMPILE_FLAGS ${CXXFLAGS_AVX2})
 
     target_compile_definitions(DistanceMeasureFactory PRIVATE _256)
-    target_link_libraries(DistanceMeasureFactory distance)
+    target_link_libraries(DistanceMeasureFactory DistanceMeasure)
 
 else()
-
     message (FATAL_ERROR "Vector size '${VECTOR_SIZE}' not recognized")
-
 endif()
-
 
 ###################
 ###     Libs    ###
 ###################
 
-# Create VectorDistance artifact
-add_library(VectorDistance SHARED adapter/cpp/DistanceMeasureAdapter.cpp)
-target_link_libraries(VectorDistance DistanceMeasureFactory)
+# Create Distance artifact
+#add_library(VectorDistance SHARED adapter/cpp/DistanceMeasureAdapter.cpp)
+#target_link_libraries(VectorDistance DistanceMeasureFactory)
 
-add_library(VectorDistanceAdapterCpp SHARED adapter/c/Distance_C_Adapter.cpp)
-target_link_libraries(VectorDistanceAdapterCpp DistanceMeasureFactory)
+add_library(DistanceAdapter STATIC distance-measure/distance_measure_adapter.cpp distance-measure/distance_measure_adapter.hpp)
+set_target_properties(DistanceAdapter PROPERTIES PUBLIC_HEADER distance-measure/distance_measure_adapter.hpp)
+target_link_libraries(DistanceAdapter DistanceMeasureFactory)
 
-add_library(VectorDistanceAdapterC SHARED adapter/c/C_Distance.c)
-target_link_libraries(VectorDistanceAdapterC VectorDistanceAdapterCpp)
+add_library(Distance STATIC distance-measure/distance.c distance-measure/distance.h)
+set_target_properties(Distance PROPERTIES PUBLIC_HEADER distance-measure/distance.h)
+target_link_libraries(Distance DistanceAdapter)
+
+include_directories(Distance ${CMAKE_SOURCE_DIR}/distance_measure)
+
+include(GNUInstallDirs)
+install(
+        TARGETS DistanceMeasure DistanceMeasureFactory DistanceAdapter Distance
+        PUBLIC_HEADER
+            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        ARCHIVE
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}/distance
+)
 
 ###################
 ### DEBUG #########
 ###################
 
-add_library(benchmark SHARED benchmark/benchmark.cpp benchmark/benchmark.hpp benchmark/StopWatch.cpp distance-measure/distance_measure.hpp)
+#add_library(benchmark SHARED benchmark/benchmark.cpp benchmark/benchmark.hpp benchmark/StopWatch.cpp distance-measure/distance_measure.hpp)
 
-add_executable(main debug/main.cpp)
-target_link_libraries(main benchmark DistanceMeasureFactory)
+#add_executable(main debug/main.cpp)
+#target_link_libraries(main benchmark DistanceMeasureFactory)
 
-add_executable(main_c debug/main.c)
-target_link_libraries(main_c VectorDistanceAdapterC)
+#add_executable(main_c debug/main.c)
+#target_link_libraries(main_c VectorDistanceAdapterC)
 ###################
 ###################
 ###################

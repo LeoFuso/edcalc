@@ -1,6 +1,6 @@
 #ifndef DISTANCE_MEASURE_FACTORY_HPP
 #define DISTANCE_MEASURE_FACTORY_HPP
-#include "../../distance-measure/distance_measure.hpp"
+#include "distance_measure.hpp"
 
 class DistanceMeasureFactory
 {

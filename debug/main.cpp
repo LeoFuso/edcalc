@@ -1,5 +1,5 @@
 #include "../benchmark/benchmark.hpp"
-#include "../adapter/cpp/DistanceMeasureFactory.hpp"
+#include "../distance-measure/distance_measure_factory.hpp"
 
 int
 main()

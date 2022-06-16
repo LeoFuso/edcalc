@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "../adapter/c/C_Distance.h"
+#include "../distance-measure/distance.h"
 
 int
 main()

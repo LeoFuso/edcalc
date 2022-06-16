@@ -1,4 +1,4 @@
-#include "C_Distance.h"
+#include "distance.h"
 
 double
 calculate(const double *x, const double *y, unsigned long n)

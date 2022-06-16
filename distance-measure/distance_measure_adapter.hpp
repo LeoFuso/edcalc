@@ -1,5 +1,5 @@
-#ifndef DISTANCE_C_ADAPTER_HPP
-#define DISTANCE_C_ADAPTER_HPP
+#ifndef DISTANCE_MEASURE_ADAPTER_HPP
+#define DISTANCE_MEASURE_ADAPTER_HPP
 
 #ifdef __cplusplus
 #define EXTERN_C extern "C"
@@ -20,4 +20,4 @@ _calculate_(Distance_type self, const double *x, const double *y, unsigned long 
 
 #undef EXTERN_C
 
-#endif //DISTANCE_C_ADAPTER_HPP
+#endif //DISTANCE_MEASURE_ADAPTER_HPP

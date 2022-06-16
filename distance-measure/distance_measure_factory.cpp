@@ -1,16 +1,16 @@
-#include "DistanceMeasureFactory.hpp"
+#include "distance_measure_factory.hpp"
 
 #if defined(_0)
-#include "../../distance-measure/baseline_distance.hpp"
+#include "baseline_distance.hpp"
 #define METHOD BaselineDistance
 #elif defined(_128)
-#include "../../distance-measure/__m128d__distance.hpp"
+#include "__m128d__distance.hpp"
 #define METHOD __m128d__Distance
 #elif defined(_256)
-#include "../../distance-measure/__m256d__distance.hpp"
+#include "__m256d__distance.hpp"
 #define METHOD __m256d__Distance
 #else
-#include "../../distance-measure/baseline_distance.hpp"
+#include "baseline_distance.hpp"
 #define METHOD BaselineDistance
 #endif
 

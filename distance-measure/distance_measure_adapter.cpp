@@ -1,5 +1,5 @@
-#include "Distance_C_Adapter.hpp"
-#include "../cpp/DistanceMeasureFactory.hpp"
+#include "distance_measure_adapter.hpp"
+#include "distance_measure_factory.hpp"
 
 Distance_type
 _init_()
